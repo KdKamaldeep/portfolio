@@ -1,0 +1,89 @@
+{% extends 'base/legendmaster.html' %}
+{% load thumbnail %}
+{% block content %}
+<link href="/static/design/assets/css/styles.css" rel="stylesheet"/>
+
+<div class="container">
+	<div class="header" style="margin-top: 25px !important;">
+                <h4 class="title">Your Project(s)</h4>
+     </div>
+	<div class="row projects">
+		{% if projects|length <= 0 %}
+
+				<div class="col-lg-12">
+					<div class="cards">
+					   <div class="header">
+							<h4 class="title">No Projects</h4>
+						</div>
+						<div class="content">
+						   You don't have any Projects. Click on Add Project button at bottom to create a project.
+						</div>
+					</div>
+				</div>
+            {% endif %}
+		{% for project in projects %}
+            <div class="col-lg-6">
+                <div class="hpanel hgreen">
+                    <div class="panel-body">
+                        <!--<span class="label label-success pull-right">NEW</span>-->
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h4><a href="/project/view/{{project.id}}">{{project.title}}</a></h4>
+
+                                <p>
+                                   {{project.description | striptags | safe | slice:':100'}}...
+                                </p>
+
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="project-label">CLIENT</div>
+                                        <small>{{project.clientname}}</small>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="project-label">START</div>
+                                        <small>{{project.startdate}}</small>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="project-label">ENDS</div>
+                                        <small>{{project.enddate}}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 project-info" style="padding-left: 0px;">
+                                <div class="project-action m-t-md">
+                                    <div class="btn-group">
+                                        <a  href="/project/view/{{project.id}}" class="btn btn-xs btn-default"> View</a>
+                                        <a href="/project/open/{{project.id}}" class="btn btn-xs btn-default"> Edit</a>
+                                        <a href="/project/remove/{{project.id}}" class="btn btn-xs btn-default anchorremove"> Delete</a>
+                                    </div>
+                                </div>
+                                <div class="project-value">
+                                    <h2 class="text-success" style="    margin-top: 10px;font-size: 14px;margin-bottom: 10px;">
+
+                                    </h2>
+                                </div>
+                                <div class="project-people">
+                                    {% for media in project.projectmedia_set.all %}
+                                        <a href="/media/{{media.file}}"
+                                           data-toggle="lightbox"
+                                           data-title="{{media.project.title}}"
+                                           data-gallery="multiimages">
+									        <img alt="logo" class="img-circle" src="/media/{{media.file}}">
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <a target="_blank" href="{{project.url}}">{{project.url }}</a>
+                    </div>
+                </div>
+            </div>
+		{% endfor %}
+
+	</div>
+
+<a title="Add Project" href="/project/new/" data-toggle="tooltip" class="btn btn-success rightfloatbutton">+</a>
+</div>
+{% endblock %}

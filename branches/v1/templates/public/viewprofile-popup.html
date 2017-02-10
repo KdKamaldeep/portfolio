@@ -1,0 +1,127 @@
+{% extends 'base/profile-header.html' %}
+{% block content %}
+<div class="container" style="padding-bottom: 0px !important;">
+
+    <div class="row profile">
+            {% if not request.user.is_authenticated %}
+                <div class="col-md-12 infomessage alert alert-info" style="display: none;">
+                    You need to Login to your account before sending contact request.
+                    <a style='text-decoration: underline;' href="/account/signin/?cnt={{userprofile.user.id}}">Click here</a> to Login .
+                    We will auto send your contact request to this user after you finish Logging in.
+                </div>
+            {% endif %}
+            <div class="col-sm-3" style="padding-left: 0px;">
+
+                <div class="row">
+                    <div class="col-xs-7 col-sm-12" style="padding-right: 0px">
+                        <img class="profile-image" src="/media/{{userprofile.profilepic}}">
+                    </div>
+                    <div class="col-xs-5 col-sm-12 " style="padding-right: 0px">
+
+                        <h3>Contact Information</h3>
+
+                        <ul class="profile-details">
+                            <li>
+                                <div><i class="fa fa-phone"></i> phone</div>
+                                {{userprofile.ext}}-{{userprofile.mobileno}}
+                            </li>
+                            <li>
+                                <div><i class="fa fa-tablet"></i> mobile </div>
+                                {{userprofile.mobileno}}
+                            </li>
+                            <li>
+                                <div><i class="fa fa-envelope"></i> e-mail</div>
+                                {{user.email}}
+                            </li>
+                            <li>
+                                <div><i class="fa fa-map-marker"></i> address</div>
+                                {{userprofile.address}}<br>
+                            </li>
+                        </ul>
+                    </div>
+                </div><!--/row-->
+
+            </div><!--/col-->
+
+            <div class="col-sm-9 ">
+
+                <div class="blog-author hpanel hgreen margin-bottom-30">
+
+                                    <div class="panel-body" id="linkComment">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="contactconteiner">
+                                                    <div class="media-body">
+
+                                                       {% if contactrequestsent == "NOTSENT" %}
+                                                           <a to-contact-id="{{userprofile.user.id}}"
+                                                              class="btncontact btn btn-xs btn-default contactrequestbutton"
+                                                              style="text-align: right;float: right;"
+                                                              href="Javascript://">Send Contact Request</a>
+                                                        {% elif  contactrequestsent == "SENT" %}
+                                                        <a disabled="disabled"
+                                                              class="btn btn-xs btn-default contactrequestbutton"
+                                                              style="text-align: right;float: right;"
+                                                              href="Javascript://">Contact request already sent</a>
+                                                        {% elif  contactrequestsent == "ALREADYACONTACT" %}
+                                                            <a disabled="disabled"
+                                                              class="btn btn-xs btn-default contactrequestbutton"
+                                                              style="text-align: right;float: right;"
+                                                              href="Javascript://"><i class="fa fa-check" aria-hidden="true"></i> Already a Contact</a>
+                                                        {% endif %}
+
+                                                    </div>
+
+                                                    <h3 style="padding: 0px;">My Skills</h3>
+                                                   <div class="media-body">
+                                                       {% for skill in userprofile.skillstolist %}
+                                                            <div style="margin-right: 10px;float: left;">
+                                                                <h5 style="background-color: #f7f9fa;padding: 10px;">{{skill}}</h5>
+                                                            </div>
+                                                        {% endfor %}
+                                                   </div>
+                                                    <h3 style="padding: 0px;">About me</h3>
+                                                   <div class="media-body">
+
+                                                            {{userprofile.aboutme | safe | slice:':500'}}...
+
+                                                   </div>
+                                                <a href="/public/viewprofile/{{userprofile.user.id}}/yes" style="float: right;">View Full Profile</a>
+
+                                                </div>
+                                            </div>
+
+                                </div>
+    </div>
+
+
+
+            </div><!--/col-->
+
+    </div>
+    </div>
+ </div>
+{% endblock %}
+{% block script %}
+    <script type="text/javascript">
+        $(function () {
+            $('.contactrequestbutton').bind('click', function () {
+                div = $('.infomessage');
+                var self = $(this)
+                var tocontactid = self.attr('to-contact-id')
+                var fromcontactid = self.attr('from-contact-id')
+                if(div.length>0){
+                    div.show()
+                }
+                else
+                {
+                    $.get('/public/send_contact_request/'+ tocontactid + '/'+ fromcontactid, function () {
+                        self.attr('disabled','disabled')
+                        self.empty()
+                        self.html('Contact request sent')
+                    })
+                }
+            })
+        })
+    </script>
+{% endblock %}

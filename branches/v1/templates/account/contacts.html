@@ -1,0 +1,53 @@
+{% extends 'base/legendmaster.html' %}
+{%load get_profile_extra%}
+{% block content %}
+<div class="container">
+    <div class="row">
+
+        <div class="header" style="margin-top: 25px !important;padding-left: 30px;">
+                <h4 class="title">Your Contact(s)</h4>
+        </div>
+        <div class="col-md-12">
+            {% for contact in usercontacts %}
+                <ul class="user-contactcontainer">
+                  <!-- User image -->
+                  <li class="user-header">
+                    <img src="/media/{% user_profile_pic_by_id  contact.contact.id %}" class="img-circle" alt="User Image">
+                    <p>
+                       {% get_profile contact.contact.id as contactprofile %}
+                      {{contact.contact.first_name}} {{contact.contact.last_name}} - {{contactprofile.position}}
+                      <small>Member since {{contact.contact.date_joined | date:'M, Y'}}</small>
+                    </p>
+                  </li>
+                  <!-- Menu Body -->
+                  <li class="user-body">
+                    <div class="col-xs-4 text-center">
+                      <a href="#">Contacts</a>
+                        <small>{% get_profile_contacts_count contact.contact.id%}</small>
+                    </div>
+                    <div class="col-xs-4 text-center">
+                      <a href="#">Projects</a>
+                        <small>{{contact.contact.project_set.all | length}}</small>
+                    </div>
+                    <div class="col-xs-4 text-center">
+                      <a href="#">Prtofolios</a>
+                        <small>{{contact.contact.portfolio_set.all | length}}</small>
+                    </div>
+                      <div class="clearfix"></div>
+                  </li>
+                  <!-- Menu Footer-->
+                  <li class="user-footer">
+                    <div class="pull-left">
+                      <a href="/public/viewprofile/{{contact.contact.id}}/yes" class="btn btn-default btn-flat">Profile</a>
+                    </div>
+                    <div class="pull-right">
+                      <a href="#" class="btn btn-default btn-flat">Remove</a>
+                    </div>
+                      <div class="clearfix"></div>
+                  </li>
+                </ul>
+            {% endfor %}
+        </div>
+    </div>
+ </div>
+{% endblock %}

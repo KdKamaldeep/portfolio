@@ -1,0 +1,109 @@
+{% extends 'base/legendmaster.html' %}
+{% block content %}
+
+<div class="container">
+        <div class="row">
+                    <div class="col-md-12">
+                        <div class="cards">
+                            <div class="header">
+                                <h4 class="title">Add Project</h4>
+                            </div>
+                            <div class="content">
+                                <form action="." method="post" enctype="multipart/form-data">
+                                    {{form.errors}}
+                                    {%csrf_token%}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="lablenobold">Title</label>
+                                                {{form.title}}
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="lablenobold">Client</label>
+                                                {{form.clientname}}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="lablenobold">Project</label>
+                                                {{form.projectname}}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="lablenobold">Services Provided</label>
+                                                {{form.services}}
+                                            </div>
+                                        </div>
+                                         <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="lablenobold">Url</label>
+                                                {{form.url}}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="lablenobold">Start Date</label>
+                                                {{form.startdate}}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="lablenobold">End Date</label>
+                                                {{form.enddate}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="lablenobold">Project Snapshot</label>
+                                                <input type="file" name="projectpic" multiple="multiple"
+                                                       class="form-control" required="required"
+                                                       placeholder="Project Snapshot">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="lablenobold">About Project</label>
+                                                <textarea rows="5"
+                                                          class="form-control ckeditor"
+                                                          placeholder="Here You can fill project details"
+                                                          name="description"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-8">
+
+                                        </div>
+                                        <div class="col-lg-4 text-right">
+                                            <a class="btn btn-primary" href="/project/">Cancel</a>
+                                            <button class="btn btn-primary" type="submit">Create Project</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="clearfix"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+    </div>
+
+
+{% endblock %}

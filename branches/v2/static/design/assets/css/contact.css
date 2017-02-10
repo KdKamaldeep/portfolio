@@ -1,0 +1,77 @@
+.profile-pic
+{
+    text-align: right;
+}
+.profile-pic> a>img {
+    border-radius: 0;
+    position: relative;
+    border: 5px solid #f4f4f4;
+    top: -30px;
+    left: 10px;
+    display: inline-block;
+    text-align: right;
+    z-index: 4;
+    width: 100px;
+    margin-bottom: -30px;
+    height:85px;
+}
+.padding-10 {
+    padding: 10px!important;
+}
+.h1cls {
+    letter-spacing: -1px;
+    font-size: 24px;
+    margin: 10px 0;
+}
+.list-unstyled {
+    padding-left: 0;
+    list-style: none;
+}
+.semi-bold {
+    font-weight: 400!important;
+}
+.h1cls small {
+    font-size: 15px;
+    font-weight: 300;
+    letter-spacing: -1px;
+}
+.text-muted {
+    color: #999;
+}
+.txt-color-darken {
+    color: #404040!important;
+}
+
+.font-md {
+    font-size: 130%!important;
+}
+.list-inline {
+    padding-left: 0;
+    list-style: none;
+    margin-left: -5px;
+}
+.friends-list li {
+    margin-bottom: 10px;
+    margin-right: 3px;
+    padding: 0;
+}
+.friends-list img {
+    width: 35px;
+    border: 1px solid #fff;
+    outline: 1px solid #bfbfbf;
+    height:35px;
+}
+.well.well-light {
+    background: #fff;
+    border: 1px solid #e2e2e2;
+}
+.no-margin {
+    margin: 0!important;
+}
+.no-padding {
+    padding: 0!important;
+}
+.list-unstyled li p
+{
+    margin:0px !important;
+}

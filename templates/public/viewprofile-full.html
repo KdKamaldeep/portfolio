@@ -1,0 +1,163 @@
+{% extends 'base/legendmaster.html' %}
+{%load get_profile_extra%}
+{% block content %}
+<div class="container" style="padding-bottom: 0px !important;">
+    {% already_contact request.user.id  userprofile.user.id as already_a_contact %}
+    {% request_already_sent request.user.id userprofile.user.id as contact_request_sent %}
+    <div class="row profile">
+            {% if not request.user.is_authenticated %}
+                <div class="col-md-12 infomessage alert alert-info" style="display: none;">
+                    You need to Login to your account before sending contact request.
+                    <a style='text-decoration: underline;' href="/account/signin/?cnt={{userprofile.user.id}}">Click here</a> to Login .
+                    We will auto send your contact request to this user after you finish Logging in.
+                </div>
+            {% endif %}
+            <div class="col-sm-3">
+
+                <div class="row">
+                    <div class="col-xs-7 col-sm-12" >
+                        <img src="{% profile_pic userprofile %}" class="profile-image">
+                    </div>
+                    <div class="col-xs-5 col-sm-12 ">
+
+                        <h3>Contact Information</h3>
+
+                        <ul class="profile-details">
+                            <li>
+                                <div><i class="fa fa-phone"></i> phone</div>
+                                {{userprofile.ext}}-{{userprofile.mobileno}}
+                            </li>
+                            <li>
+                                <div><i class="fa fa-tablet"></i> mobile </div>
+                                {{userprofile.mobileno}}
+                            </li>
+                            <li>
+                                <div><i class="fa fa-envelope"></i> e-mail</div>
+                                {{user.email}}
+                            </li>
+                            <li>
+                                <div><i class="fa fa-map-marker"></i> address</div>
+                                {{userprofile.address}}<br>
+                            </li>
+                        </ul>
+                    </div>
+                </div><!--/row-->
+
+            </div><!--/col-->
+
+            <div class="col-sm-9 ">
+
+                <div class="blog-author hpanel hgreen margin-bottom-30">
+
+                                    <div class="panel-body" id="linkComment">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="contactconteiner">
+                                                    <div class="media-body" style="width:300px;float: right;">
+                                                    {% if showacceptrejectbutton == True %}
+
+                                                           <a requestaction="reject" contact-id="{{contactrequest.id}}"
+                                                              class="acceptrejectbutton btn btn-xs btn-default"
+                                                              style="text-align: right;float: right;"
+                                                              href="Javascript://">Reject Contact Request</a>
+
+                                                               <a requestaction="accept" contact-id="{{contactrequest.id}}"
+                                                                  class="acceptrejectbutton btn btn-xs btn-default"
+                                                                  style="text-align: right;float: right;margin-right: 10px;"
+                                                                  href="Javascript://">Accept Contact Request</a>
+
+                                                    {% endif %}
+
+                                                 {% if request.user.id !=  userprofile.user.id %}
+                                                    {% if showrequestbutton == True %}
+                                                            {% if already_a_contact%}
+                                                                    <a disabled="disabled"
+                                                                      class="btn btn-xs btn-default contactrequestbutton"
+                                                                      style="text-align: right;float: right;"
+                                                                      href="Javascript://"><i class="fa fa-check" aria-hidden="true"></i> Already a Contact</a>
+                                                             {%elif contact_request_sent %}
+                                                                    <a disabled="disabled"
+                                                                      class="btn btn-xs btn-default contactrequestbutton"
+                                                                      style="text-align: right;float: right;"
+                                                                      href="Javascript://"> <i class="fa fa-check" aria-hidden="true"></i> Contact request sent</a>
+                                                             {%else%}
+
+                                                                     <a to-contact-id="{{userprofile.user.id}}"
+                                                                      class="btncontact btn btn-xs btn-default contactrequestbutton"
+                                                                      style="text-align: right;float: right;"
+                                                                      href="Javascript://">Send Contact Request</a>
+                                                             {%endif%}
+                                                    {% endif %}
+                                                 {% endif %}
+
+                                            </div>
+
+                                                   <div class="media-body" style="float:left;width:200px;">
+                                                        <h1 class="h1cls">{{userprofile.user.first_name}}
+                                                            <span class="semi-bold">{{userprofile.user.last_name}}</span>
+                                                        </h1>
+                                                   </div>
+<div class="clearfix"></div>
+
+
+                                                    <h3 style="padding: 0px;">My Skills</h3>
+                                                   <div class="media-body">
+                                                       {% for skill in userprofile.skillstolist %}
+                                                            <div style="margin-right: 10px;float: left;">
+                                                                <h5 style="background-color: #f7f9fa;padding: 10px;">{{skill}}</h5>
+                                                            </div>
+                                                        {% endfor %}
+                                                   </div>
+                                                   <!-- <div class="col-md-3">
+                                                      <h3 style="padding: 0px;">Portfolios</h3>
+                                                   <div class="media-body">
+                                                        <small>{{request.user.portfolio_set.all | length}}</small>
+                                                   </div>
+                                                        </div>
+                                                    <div class="col-md-3">
+                                                      <h3 style="padding: 0px;">Projects</h3>
+                                                       <div class="media-body">
+                                                            <small>{{request.user.project_set.all | length}}</small>
+                                                       </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>-->
+                                                    <h3 style="padding: 0px;">About me</h3>
+                                                   <div class="media-body">
+
+                                                            {{userprofile.aboutme | safe }}
+
+                                                   </div>
+
+                                                </div>
+                                            </div>
+
+                                </div>
+    </div>
+
+
+
+            </div><!--/col-->
+
+    </div>
+    </div>
+ </div>
+<div data-notify="container"
+     class="col-xs-11 col-sm-4 alert alert-info alert-with-icon animated fadeInDown datanotifycontainer"
+     role="alert" data-notify-position="top-right"
+     style="    display: none;
+    margin: 0px auto;
+    position: fixed;
+    transition: all 0.5s ease-in-out;
+    z-index: 1031;
+    top: 20px;
+    right: 20px;
+    background-color: #63d8f1;
+    color: #FFF;"><button type="button" aria-hidden="true" class="close closenotify" data-notify="dismiss"
+                                       style="position: absolute; right: 10px; top: 50%; margin-top: -13px; z-index: 1033;">×</button>
+    <span data-notify="icon" class="pe-7s-gift"></span> <span data-notify="title"></span>
+    <span data-notify="message" class="message">
+
+    </span>
+    <a href="#" target="_blank" data-notify="url"></a>
+</div>
+{% endblock %}

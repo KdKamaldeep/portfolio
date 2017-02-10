@@ -1,0 +1,152 @@
+{% extends 'base/legendmaster.html' %}
+{% load urls %}
+{% load get_profile_extra %}
+{%block searchcontent%}
+<div class="searchbar">
+
+    <form action="/public/searchprojects/" method="get">
+
+             <div class="form-group divinput" >
+
+                <input type="text" value="{{name}}" placeholder="Name of the project/services/ url                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      " name="name"
+                  style="width: 400px;" class="form-control onfocusofinput"/>
+            </div>
+{%csrf_token%}
+        <div class="cleafix"></div>
+                <div class="form-group" style="float: right;
+            margin-top: -15px;" >
+
+                <button style="border-radius: 0px;" type="submit" class="btn btn-primary">Search</button>
+            </div>
+        <div class="cleafix"></div>
+     </form>
+</div>
+{%endblock%}
+{% block content %}
+<!--<link href="/static/design/assets/css/styles.css" rel="stylesheet"/>-->
+
+<div class="container">
+
+<div class="cleafix"></div>
+        <div class="row " style="margin-top: 60px;">
+
+		{% if projects|length <= 0 %}
+					<div class="cards">
+					   <div class="header">
+							<h4 class="title">Nothing Found!</h4>
+						</div>
+						<div class="content">
+						   We did not found any projects that match your search criteria.
+						</div>
+					</div>
+
+            {% endif %}
+            {% if projects|length > 0 %}
+              <div class="header" style="margin-top: 0px !important;padding-left: 20px;">
+                <h4 class="title">Showing {{ projects.number }} of {{ projects.paginator.num_pages }}</h4>
+              </div>
+            {% endif %}
+		{% for project in projects %}
+            <div class="col-lg-6">
+
+                <div class="hpanel hgreen">
+                    <div class="panel-body">
+                        <!--<span class="label label-success pull-right">NEW</span>-->
+                        <div class="row">
+                            <div class="col-sm-8">
+
+                                <h4><a href="/public/project/{{project.portfolio.uuid}}/{{project.project.id}}">{{project.project.title}}</a></h4>
+
+                                <p style="height:70px;">
+                                   {{project.project.description | striptags | safe | slice:':100'}}...
+                                </p>
+
+                                <div class="row">
+                                    <div class="col-sm-4" >
+                                        <div class="project-label">Client</div>
+                                        <small>{{project.project.clientname}}</small>
+                                    </div>
+                                    <div class="col-sm-4" style="padding-right: 0px;">
+                                        <div class="project-label">Start date</div>
+                                        <small>{{project.project.startdate}}</small>
+                                    </div>
+                                    <div class="col-sm-4" style="padding-right: 0px;">
+                                        <div class="project-label">End date</div>
+                                        <small>{{project.project.enddate}}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 project-info" style="padding-left: 0px;text-align:right;">
+                                <div class="project-action m-t-md">
+
+                                </div>
+                                <div class="project-value">
+                                    <h2 class="text-success" style="margin-top: 10px;font-size: 14px;margin-bottom: 10px;">
+
+                                    </h2>
+                                </div>
+                                <div class="project-people">
+                                    {% for media in project.project.projectmedia_set.all %}
+                                        <a href="/media/{{media.file}}" data-toggle="lightbox"
+                                           data-title="{{media.project.title}}"
+                                           data-gallery="multiimages">
+
+                                                <img alt="logo" style="width: 28px;height: 28px;margin-left: 2px;margin-bottom: 4px;"
+                                                 class="img-circle " src="/media/{{media.file}}">
+
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <div style="float: left;">
+                            <span style="left: 0px;border: none;border-radius: 0px;padding-left:
+                            2px;float:left;padding-top: 8px;"
+                                      class="fa fa-user" href="#"></span>
+                            <a  style="float: left;margin-left: -8px;">
+
+                                <img alt="logo" data-poload="/public/viewprofile/{{project.project.user.id}}/no"
+                                     data-url="/public/viewprofile/{{project.project.user.id}}/no"
+                                     class="contactlogo viewprofile" position="{%popover_position forloop.counter%}"
+                                     profile-url="/public/viewprofile/{{project.project.user.id}}?v=1"
+                                     src="{% user_profile_pic project.project.user%}">
+                            </a>
+                            <div class="clearfix"></div>
+                         </div>
+
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+		{% endfor %}
+
+	</div>
+
+    <div style="display: none;" id="profilecontent"></div>
+    {% if projects|length > 0%}
+        <ul class="pagination" style="float: left">
+            {% if projects.has_previous %}
+                <li><a href="{% add_params request.get_full_path page=projects.previous_page_number %}">Prev</a></li>
+            {%else%}
+                <li><span class="currentpage">Prev</span></li>
+            {% endif %}
+            {% for page in projects.paginator.page_range %}
+                {% ifequal page projects.number %}
+                    <li><span class="currentpage">{{page}}</span></li>
+                    {% else %}
+                    <li><a href="{% add_params request.get_full_path page=page %}">{{page}}</a></li>
+                {% endifequal  %}
+            {% endfor %}
+            {% if projects.has_next %}
+                <li><a href="{% add_params request.get_full_path page=projects.next_page_number %}">Next</a></li>
+            {%else%}
+                <li><span class="currentpage">Next</span></li>
+            {% endif %}
+        </ul>
+    {%endif%}
+
+</div>
+{% endblock %}
+

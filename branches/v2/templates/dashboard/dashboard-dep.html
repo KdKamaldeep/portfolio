@@ -1,0 +1,61 @@
+{% extends 'base/dashboardheader.html' %}
+{% block content %}
+        <ul class="portfolio-filters text-center">
+                        <li data-filter="*" class="active">All</li>
+                        <li data-filter=".ui">UI design</li>
+                        <li data-filter=".print">Print Design</li>
+                        <li data-filter=".dev">Development</li>
+        </ul>
+        <div class="gallery" id="gallery" style="position: relative; height: 1057px;">
+			{% for project in projects %}
+				<figure class="effect-zoe print ui" style="position: absolute; left: 0px; top: 0px;">
+					<img src="/static/assets/images/portfolio/1.jpg" alt="" width="300" height="316">
+					<figcaption>
+						<h2 class="title">{{project.title}}</h2>
+						<p class="links">
+							<a target="_blank" href="{{project.url}}">Visit project</a> |
+							<a href="http://www.gettemplate.com/demo/progressus-pro/portfolio-item.html">View Details</a>
+						</p>
+					</figcaption>
+				</figure>
+			<figure class="effect-zoe print ui" style="position: absolute; left: 0px; top: 0px;">
+					<img src="/static/assets/images/portfolio/1.jpg" alt="" width="300" height="316">
+					<figcaption>
+						<h2 class="title">{{project.title}}</h2>
+						<p class="links">
+							<a target="_blank" href="{{project.url}}">Visit project</a> |
+							<a href="http://www.gettemplate.com/demo/progressus-pro/portfolio-item.html">View Details</a>
+						</p>
+					</figcaption>
+				</figure>
+			<figure class="effect-zoe print ui" style="position: absolute; left: 0px; top: 0px;">
+					<img src="/static/assets/images/portfolio/1.jpg" alt="" width="300" height="316">
+					<figcaption>
+						<h2 class="title">{{project.title}}</h2>
+						<p class="links">
+							<a target="_blank" href="{{project.url}}">Visit project</a> |
+							<a href="http://www.gettemplate.com/demo/progressus-pro/portfolio-item.html">View Details</a>
+						</p>
+					</figcaption>
+				</figure>
+			{% endfor %}
+		</div>
+{% endblock %}
+    {% block script %}
+<script>
+		jQuery(document).ready(function($) {
+			// bind filter button click
+			$('.portfolio-filters').on( 'click', 'li', function() {
+				var filterValue = $( this ).attr('data-filter');
+				$('.gallery').isotope({ filter: filterValue });
+			});
+
+  			// init isotope lib, once all images are loaded
+  			$container = $('.gallery');
+  			imagesLoaded( '.gallery', function() {
+  				$container.isotope({itemSelector: 'figure', masonry: {} });
+  			});
+
+ 		});
+	</script>
+    {% endblock %}

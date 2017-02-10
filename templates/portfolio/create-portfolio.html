@@ -1,0 +1,238 @@
+{% extends 'base/legendmaster.html' %}
+{% load get_profile_extra %}
+{% block content %}
+<div class="container">
+ 			<div class="row">
+
+                    <div class="col-md-12">
+                        <div class="cards">
+                            <div class="header">
+                                <h4 class="title">Add Portfolio</h4>
+                            {%getcurrentdomain request as current_domain%}
+
+                            </div>
+                            <div class="content">
+                                <form action="." method="post" enctype="multipart/form-data">
+                                    {%csrf_token%}
+									{{form.errors}}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="lablenobold">Title</label>
+                                                {{form.title}}
+                                                <!--<input type="text" name="title"
+                                                       class="form-control" required="required" placeholder="Portfolio Title">-->
+                                            </div>
+                                        </div>
+                                        <!-- <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="lablenobold">SubTitle</label>
+                                                {{form.subtitle}}
+                                            </div>
+                                        </div>-->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                                <label class="lablenobold">Portfolio Url</label>
+                                                <div class="input-group margin-bottom-20">
+                                                              {{form.portfolio_url}}
+                                                    <a class="input-group-addon" id="btnChangePass" href="#">
+                                                        .{%get_portfolio_extension_url request%}</a>
+                                                    </div>
+                                            </div>
+                                            <input type="hidden" name="portfolio_host" value="{%get_portfolio_extension_url request%}"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                         <input type="hidden" style="display: none;"
+                                                                   name="portfolio_template" id="templateid">
+
+                                        <div class="col-md-4" >
+                                            <div>
+                                                <img src="/media/portfolio/eventtemplatesnapshot.png" class="templatecls"
+                                                     templateid="eventtemplateindex.html"
+                                                     style="width:300px;height:300px"/>
+
+                                                 <i class="fa fa-circle-thin color-green"
+                                                   style="color: green !important;font-size: 20px;float: right;margin-right:5px;margin-top: 10px"></i>
+
+                                                <a href="/demo/previeweventtemplateindex.html" target="_blank"
+                                                   style="padding:4px 8px;margin-top:10px;font-size:12px"
+                                                   class="btn btn-default">
+                                                    <i class="fa fa-eye"></i> Live Preview
+                                                </a>
+
+
+                                            </div>
+                                        </div>
+                                         <div class="col-md-4">
+                                            <img src="/media/portfolio/creativetemplatesnapshot.png" class="templatecls"
+                                                 templateid="creativetemplateindex.html"
+                                                 style="width:300px;height:300px">
+
+                                              <i class="fa fa-circle-thin color-green" style="color: green !important;font-size: 20px;float: right;margin-right:5px;margin-top: 10px"></i>
+
+
+                                              <a href="/demo/previewcreativetemplateindex.html" target="_blank"
+                                                   style="padding:4px 8px;margin-top:10px;font-size:12px"
+                                                   class="btn btn-default">
+                                                    <i class="fa fa-eye"></i> Live Preview
+                                                </a>
+
+
+                                        </div>
+                                         <div class="col-md-4">
+                                            <img src="/media/portfolio/freelancertemplatesnapshot.png" class="templatecls"
+                                                 templateid="previewfreelancertemplate.html"
+                                                 style="width:300px;height:300px">
+
+                                             <i class="fa fa-circle-thin color-green aa" style="color: green !important;font-size: 20px;float: right;margin-right:5px;margin-top: 10px"></i>
+
+                                              <a href="/demo/previewfreelancertemplate.html" target="_blank"
+                                                   style="padding:4px 8px;margin-top:10px;font-size:12px"
+                                                   class="btn btn-default">
+                                                    <span class="fa fa-eye"></span> Live Preview
+                                                </a>
+
+
+                                        </div>
+                                    </div>
+
+                                    <div style="margin-top:20px"></div>
+
+
+                                    <!--<div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="lablenobold">About Portfolio</label>
+                                                {{form.desc}}
+                                            </div>
+                                        </div>n/
+                                    </div>-->
+									 <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <button type="button" class="btn btn-primary" id="addproject">Add Projects</button>
+												<br>
+												<span id="selectedprojects"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-8">
+
+                                        </div>
+                                        <div class="col-lg-4 text-right">
+                                            <a class="btn btn-primary" href="/portfolio/">Cancel</a>
+                                            <button class="btn btn-primary" type="submit">Create Portfolio</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="clearfix"></div>
+                                    <div id="projectmodal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Select Projects</h4>
+      </div>
+      <div class="modal-body">
+        <div clsas="row">
+	{% for project in projects%}
+	    <div class="col-lg-6 projects" >
+            <input type="checkbox" style="display: none;"
+                                                                   name="project"
+                                                                   value="{{project.id}}">
+                <div class="hpanel hgreen">
+                    <div class="panel-body">
+                        <!--<span class="label label-success pull-right">NEW</span>-->
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <h4><a href="/project/view/{{project.id}}">{{project.title | slice:':15'}}...</a></h4>
+
+                                <p>
+                                   {{project.description | striptags | safe | slice:':100'}}...
+                                </p>
+
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="project-label">CLIENT</div>
+                                        <small>{{project.clientname}}</small>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="project-label">START</div>
+                                        <small>{{project.startdate}}</small>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="project-label">ENDS</div>
+                                        <small>{{project.enddate}}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 project-info" style="padding-left: 0px;">
+                                <div class="project-value">
+                                    <h2 class="text-success" style="    margin-top: 10px;font-size: 14px;margin-bottom: 10px;">
+
+                                    </h2>
+                                </div>
+                                <div class="project-people">
+                                    {% for media in project.projectmedia_set.all %}
+                                        <a href="/media/{{media.file}}" data-toggle="lightbox" data-title="{{media.project.title}}"
+                                           data-gallery="multiimages">
+									        <img alt="logo" class="img-circle" src="/media/{{media.file}}">
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <a target="_blank" href="{{project.url}}">{{project.url }}</a>
+                        <i class="fa fa-circle-thin color-green" style="color: green !important;font-size: 20px;float: right;"></i>
+                    </div>
+                </div>
+            </div>
+	{% endfor %}
+</div>
+		  <div style="clear: both;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-done btn-primary">Done</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+</div>
+{% endblock %}
+
+{% block script%}
+<script>
+    $(document).ready(function(){
+        $('.templatecls').click(function(){
+            var icon = $(this).next();
+            if(icon.hasClass('fa-check-circle')){
+                icon.removeClass('fa-check-circle').addClass('fa-circle-thin')
+                $('#templateid').val("");
+             }
+             else{
+                icon.removeClass('fa-circle-thin').addClass('fa-check-circle')
+                $('#templateid').val($(this).attr('templateid'));
+             }
+         console.log($('#templateid').val());
+
+        });
+    });
+
+</script>
+{% endblock%}

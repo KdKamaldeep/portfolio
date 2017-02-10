@@ -1,0 +1,9 @@
+{% extends 'base/legendmaster.html' %}
+{% block content %}
+
+<div class="container no-padding">
+    <h5>{{user.first_name}}</h5>
+    <h5>{{user.last_name}}</h5>
+    <img src="/media/{{userprofile.profilepic}}"/>
+</div>
+{% endblock %}

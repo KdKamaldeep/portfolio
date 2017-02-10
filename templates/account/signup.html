@@ -1,0 +1,136 @@
+{% extends 'base/legendmaster.html' %}
+{% block content %}
+<div class="container">
+    <div class="row margin-vert-30">
+        <!-- Register Box -->
+        <div class="col-md-6 col-md-offset-3 col-sm-offset-3">
+            <form class="signup-page" method="post" action="/account/signup/">
+                 {% csrf_token %}
+                {%if form.errors|length > 0%}
+                <div class="alert alert-danger">{{form.errors}}</div>
+                {%endif%}
+                <div class="signup-header">
+                    <h2>Register a new account</h2>
+                    <p>Already a member?
+                        <a href="/account/signin">Click here</a> to login to your account.</p>
+                </div>
+                <label>First Name</label>
+                <input type="text" name="first_name" class="form-control margin-bottom-20"
+                       placeholder="Your name" required="required"
+                       oninvalid="this.setCustomValidity('Enter First Name')"
+										   oninput="setCustomValidity('')">
+
+                <label>Last Name</label>
+                <input type="text" name="last_name" class="form-control margin-bottom-20"
+                       placeholder="Your name" required="required"
+                       oninvalid="this.setCustomValidity('Enter Last Name')"
+										   oninput="setCustomValidity('')">
+                <label>Email Address
+                    <span class="color-red">*</span>
+                </label>
+                <input type="email" name="emailaddress" class="form-control margin-bottom-20"
+                       placeholder="Email" required="required"
+                       oninvalid="this.setCustomValidity('Enter Email Address')"
+										   oninput="setCustomValidity('')">
+
+                <label>Who are you?
+                    <span class="color-red">*</span>
+                </label>
+                <input type="text" name="position" class="form-control margin-bottom-20" required="required"
+                       placeholder="e.g Web Developer /  Software archietect etc"
+                       oninvalid="this.setCustomValidity('Enter Who Are You?')"
+										   oninput="setCustomValidity('')">
+
+
+                <label>Member Type
+                    <span class="color-red">*</span>
+                </label>
+                <select name="membertype" class="form-control margin-bottom-20" required="required">
+                    <option value="">Select Type</option>
+                    <option value="INDIVIDUAL">INDIVIDUAL</option>
+                    <option value="COMPANY">COMPANY</option>
+                </select>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label>User Name
+                            <span class="color-red">*</span>
+                        </label>
+                        <input type="text" name="username" class="form-control margin-bottom-20"
+                               placeholder="Username" required="required"
+                               oninvalid="this.setCustomValidity('Enter Username')"
+										   oninput="setCustomValidity('')">
+                    </div>
+                    <div class="col-sm-6">
+                        <label>Password
+                            <span class="color-red">*</span>
+                        </label>
+                        <input type="password" name="password" class="form-control margin-bottom-20"
+                               placeholder="Password" required="required"
+                               oninvalid="this.setCustomValidity('Enter Password')"
+										   oninput="setCustomValidity('')">
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <label class="checkbox">
+                            <input type="checkbox" required id="chk_tc" oninvalid="this.setCustomValidity('Please Accept Tearms & Conditions')"
+										   onchange="setCustomValidity('')">I read the
+                            <a href="#">Terms and Conditions</a>
+                            <br>
+                            <span id="team-error" style="display:none">Please check the Teams and Conditions</span>
+                        </label>
+                    </div>
+                    <div class="col-lg-4 text-right">
+                        <button class="btn btn-primary" type="submit" id="btnRegister">Register</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- End Register Box -->
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% block script %}
+<script type="application/javascript">
+    $(function() {
+
+/*
+        $('#chk_tc').change(function() {
+            var status = $('#chk_tc').is(":checked");
+            if(status == false){
+                 $('#team-error').css('display','block')
+                 $('#btnRegister').attr('disabled','disabled');
+            }
+            else{
+                $('#team-error').css('display','none')
+                $('#btnRegister').removeAttr   ('disabled');
+            }
+        });
+
+
+        $('#btnRegister').removeAttr('disabled');
+
+        $('#btnRegister').click(function(){
+            var status = $('#chk_tc').is(":checked");
+
+            if(status == false){
+                 $('#team-error').css('display','block')
+                 $('#btnRegister').attr('disabled','disabled');
+            }
+            else{
+                $('#team-error').css('display','none')
+                $('#btnRegister').removeAttr('disabled');
+            }
+
+
+        });
+*/
+
+    });
+ </script>
+{% endblock %}

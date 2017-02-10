@@ -1,0 +1,130 @@
+{% extends 'base/legendmaster.html' %}
+{% load urls %}
+{% load get_portfolio_extra %}
+{% load get_profile_extra %}
+{%block searchcontent%}
+<div class="searchbar">
+
+    <form action="/public/searchportfolios/" method="get">
+         <div class="form-group divinput" >
+            <input type="text" value="{{title}}" style="width: 300px;" placeholder="Portfolio name / title" name="title"
+                   class="form-control onfocusofinput"/>
+         </div>
+         {%csrf_token%}
+         <div class="cleafix"></div>
+
+         <div class="form-group" style="float: right;margin-top: -15px;">
+            <button style="border-radius: 0px;" type="submit" class="btn btn-primary">Search</button>
+         </div>
+
+        <div class="cleafix"></div>
+     </form>
+</div>
+{%endblock%}
+{% block content %}
+
+<div class="container">
+
+<div class="cleafix"></div>
+        <div class="row " >
+
+		    {% if portfolios|length <= 0 %}
+					<div class="cards">
+					   <div class="header">
+							<h4 class="title">Nothing Found!</h4>
+						</div>
+						<div class="content">
+						   We did not found any portfolios that match your search criteria.
+						</div>
+					</div>
+            {% endif %}
+
+        {% if portfolios|length > 0 %}
+          <div class="header" style="margin-top: 40px !important;padding-left: 20px;">
+            <h4 class="title">Showing {{ portfolios.number }} of {{ portfolios.paginator.num_pages }}</h4>
+          </div>
+        {% endif %}
+		{% for portfolio in portfolios %}
+            <div class="col-lg-6">
+                <div class="hpanel hgreen">
+                    <div class="panel-body">
+
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <h4 style="margin-top: 0px;"><a href="/public/portfolio/{{portfolio.uuid}}">{{portfolio.title}}</a></h4>
+
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <div class="project-label">TOTAL VIEWS</div>
+                                        <small>{% get_portfolio_views portfolio %} view(s)</small>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="project-label">TOTAL PROJECTS</div>
+                                        <small>{% get_portfolio_projects portfolio %} project(s)</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 project-info" style="padding-left: 0px;">
+                                <div class="project-action m-t-md">
+                                </div>
+                                <div class="project-value">
+                                    <h2 class="text-success" style="margin-top: 10px;font-size: 14px;margin-bottom: 10px;">
+
+                                    </h2>
+                                </div>
+                                <div class="project-people">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                       <div style="float: left;">
+                            <span style="left: 0px;border: none;border-radius: 0px;padding-left:
+                            2px;float: left;padding-top: 8px;"
+                                      class="fa fa-user" href="#"></span>
+                            <a  style="float: left;margin-left: -8px;">
+                                <img alt="logo" data-poload="/public/viewprofile/{{portfolio.user.id}}/no"
+                                     data-url="/public/viewprofile/{{portfolio.user.id}}/no"
+                                     class="contactlogo viewprofile" position="{%popover_position forloop.counter%}"
+                                     profile-url="/public/viewprofile/{{portfolio.user.id}}?v=1"
+                                     src="{% user_profile_pic portfolio.user%}">
+
+                            </a>
+                            <div class="clearfix"></div>
+                         </div>
+                        <div style="float:right;">
+                            <a target="_blank" href="http://{{portfolio.portfolio_url}}.{{portfolio.portfolio_host}}">http://{{portfolio.portfolio_url}}.{{portfolio.portfolio_host}}</a>
+                        </div>
+
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+		{% endfor %}
+
+	</div>
+    {% if portfolios|length > 0%}
+        <ul class="pagination" style="float: left">
+            {% if portfolios.has_previous %}
+                <li><a href="{% add_params request.get_full_path page=projects.previous_page_number %}">Prev</a></li>
+            {%else%}
+                <li><span class="currentpage">Prev</span></li>
+            {% endif %}
+            {% for page in portfolios.paginator.page_range %}
+                {% ifequal page portfolios.number %}
+                    <li><span class="currentpage">{{page}}</span></li>
+                    {% else %}
+                    <li><a href="{% add_params request.get_full_path page=page %}">{{page}}</a></li>
+                {% endifequal  %}
+            {% endfor %}
+            {% if portfolios.has_next %}
+                <li><a href="{% add_params request.get_full_path page=projects.next_page_number %}">Next</a></li>
+            {%else%}
+                <li><span class="currentpage">Next</span></li>
+            {% endif %}
+        </ul>
+    {%endif%}
+
+</div>
+{% endblock %}

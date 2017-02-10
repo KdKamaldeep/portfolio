@@ -1,0 +1,147 @@
+{% extends 'base/legendmaster.html' %}
+{% block content %}
+<div class="container">
+<div class="row">
+    <a title="Add Portfolio" href="/portfolio/new/" data-toggle="tooltip" class="btn btn-success rightfloatbutton">+</a>
+    <div class="col-md-12">
+       <div class="cardwithoutboarder">
+           <div class="header" style=" padding-left: 20px !important;  margin-top: 25px !important;">
+                <h4 class="title">Public Portfolio(s)</h4>
+            </div>
+           <div class="content">
+            {% if publicportfolios|length <= 0 %}
+               <p style="    margin-left: 20px;">You don't have any public portfolios. Click on <i alt="ADD TO PUBLIC LSIT" class="fa fa-bullhorn" aria-hidden="true"></i>
+               link on a portfolio to make it public.</p>
+            {% endif %}
+            {% for portfolio in publicportfolios %}
+
+                   <!--<a href="/portfolio/open/{{portfolio.id}}">-->
+                      <div class="col-md-4">
+                    <div class="card card-user contentcard180" style="min-height: 100px">
+                        <div class="image">
+                            <img src="/media/{{portfolio.snapshot}}" alt="...">
+                        </div>
+                        <div class="content">
+                            <div class="author cardauthornomargin">
+
+                             <h4 style="    font-size: 16px;" class="title">{{portfolio.title|slice:':30'}}...<br>
+                                <small style="text-transform: lowercase;">{{portfolio.subtitle|slice:':100'}}...</small>
+                            </h4>
+
+                            </div>
+
+                        </div>
+                    <small style="float: left;font-size: 12px;margin-left: 16px;color:#9A9A9A;">
+                        Total Views : {{portfolio.hitcount}}
+                    </small>
+                    <small style="float: right;font-size: 12px;margin-right: 16px;color:#9A9A9A;">
+                            Total Projects : {{portfolio.totalprojects}}
+                    </small>
+                    <div style="clear: both;"></div>
+                    <hr>
+                    <div class="text-center" style="padding: 10px;">
+
+                        <a class="btn-simple" data-toggle="tooltip"
+                           title="EDIT PORTFOLIO" href="/portfolio/open/{{portfolio.id}}">
+                            <i class="fa fa-editfa fa-edit" aria-hidden="true" title="View Portfolio"></i>
+                        </a>
+                        <a class="btn-simple" data-toggle="tooltip"  title="VIEW PORTFOLIO" href="/portfolio/view/{{portfolio.uuid}}">
+                            <i class="fa fa-folder-open" aria-hidden="true" title="VIEW PORTFOLIO"></i>
+                        </a>
+                        <a class="btn-simple" data-toggle="tooltip"  href="/portfolio/makepublic/{{portfolio.id}}"
+                           title="REMOVE FROM PUBLIC LIST">
+                            <i alt="REMOVE FROM PUBLIC LIST" class="fa fa-bullhorn" aria-hidden="true"></i>
+                        </a>
+                        <a class="btn-simple anchorremove" data-toggle="tooltip"  title="REMOVE" href="/portfolio/removeportfolio/{{portfolio.id}}">
+                            <i class="fa fa-times" aria-hidden="true" title="REMOVE"></i>
+                        </a>
+                        <br>
+                        <a style="font-size: 11px" target="_blank" data-toggle="tooltip" title="VIEW AS PUBLIC"
+                           href="{{portfolio.url}}">{{portfolio.url}}</a>
+
+                    </div>
+                </div>
+            </div>
+                 <!--  </a>-->
+
+            {% endfor %}
+               <div style="clear: both"></div>
+          <hr/>
+
+             <div style="clear: both"></div>
+       </div>
+
+        <div style="clear: both"></div>
+    </div>
+</div>
+<hr>
+ <div clsas="row">
+     <div class="col-md-12">
+     <div class="header" style="padding-left: 20px !important;    margin-top: 25px !important;">
+                <h4 class="title">Private Portfolio(s)</h4>
+     </div>
+            {% for portfolio in unpublicportfolios %}
+
+                <!--<a href="/portfolio/open/{{portfolio.id}}">-->
+                        <div class="col-md-4">
+                <div class="card card-user contentcard180">
+                    <div class="image">
+                        <img src="/media/{{portfolio.snapshot}}" alt="...">
+                    </div>
+                    <div class="content">
+                        <div class="author cardauthornomargin">
+
+                              <h4 style="    font-size: 16px;" class="title">{{portfolio.title|slice:':30'}}...<br>
+                                 <small style="text-transform: lowercase;">{{portfolio.subtitle|slice:':100'}}...</small>
+                              </h4>
+
+                        </div>
+                    </div>
+                   <!-- <a href="/portfolio/view/{{portfolio.uuid}}"
+                                style="float: left;font-size: 12px;margin-left: 15px">
+                                View Portfolio
+                    </a>-->
+                    <small style="float: left;font-size: 12px;margin-left: 16px;color:#9A9A9A;">
+                                Total Views : {{portfolio.hitcount}}
+                    </small>
+                    <small style="float: right;font-size: 12px;margin-right: 16px;color:#9A9A9A;">
+                            Total Projects : {{portfolio.totalprojects}}
+                    </small>
+                    <div style="clear: both;"></div>
+                    <hr>
+                     <div class="text-center" style="padding: 10px;">
+                                <a class="btn-simple" data-toggle="tooltip"
+                                     title="EDIT PORTFOLIO" href="/portfolio/open/{{portfolio.id}}">
+                                 <i class="fa fa-editfa fa-edit" aria-hidden="true" title="View Portfolio"></i>
+                                </a>
+                                <a class="btn-simple" data-toggle="tooltip"  title="VIEW PORTFOLIO" href="/portfolio/view/{{portfolio.uuid}}">
+                                    <i class="fa fa-folder-open" aria-hidden="true" title="VIEW PORTFOLIO"></i>
+                                </a>
+                                <a class="btn-simple" data-toggle="tooltip"  href="/portfolio/makepublic/{{portfolio.id}}"
+                                   title="ADD TO PUBLIC LIST">
+                                    <i alt="ADD TO PUBLIC LIST" class="fa fa-bullhorn" aria-hidden="true"></i>
+                                </a>
+                                <a class="btn-simple anchorremove" data-toggle="tooltip"  title="REMOVE" href="/portfolio/removeportfolio/{{portfolio.id}}">
+                                    <i class="fa fa-times" aria-hidden="true" title="REMOVE"></i>
+                                </a>
+
+                     </div>
+                </div>
+            </div>
+                 <!--   </a>-->
+
+            {% endfor %}
+        </div>
+     </div>
+</div>
+{% endblock %}
+
+{% block script%}
+	<script type="application/javascript">
+		$(function () {
+            $('.btncopy').bind('click', function () {
+
+            })
+		})
+	</script>
+{%endblock%}

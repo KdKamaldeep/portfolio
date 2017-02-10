@@ -1,0 +1,220 @@
+{% extends 'base/legendmaster.html' %}
+{% load get_profile_extra %}
+{% block content %}
+<div class="container">
+ 			<div class="row">
+                {% if saved %}
+                    <div class="col-md-12 margin-top-10">
+                        <div class="alert alert-success">
+                            Your changes has been saved!
+                        </div>
+                    </div>
+                {% endif %}
+                    <div class="col-md-12">
+                        <div class="cards">
+                            <div class="header">
+                                <h4 class="title">Edit Portfolio</h4>
+                            </div>
+                            <div class="content">
+                                <form action="/portfolio/open/{{portfolioid}}" method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="lablenobold">Title</label>
+                                                {{form.title}}
+                                            </div>
+                                        </div>
+                                         <div class="col-md-6">
+                                        <div class="form-group">
+                                                <label class="lablenobold">Portfolio Url</label>
+                                                <div class="input-group margin-bottom-20">
+                                                              {{form.portfolio_url}}
+                                                    <a class="input-group-addon" id="btnChangePass" href="#">
+                                                        .{%get_portfolio_extension_url request%}</a>
+                                                    </div>
+                                            </div>
+                                            {{form.portfolio_host}}
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                        <button type="button" class="btn btn-primary"
+                                                                    id="addproject">Add Projects</button>
+                                        </div>
+                                    </div>
+                                     <div class="row">
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Published</label>
+                                                {{form.public}}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="clearfix"></div>
+                                    <div class="row">
+                                        <div class="col-lg-8">
+
+                                        </div>
+                                        <div class="col-lg-4 text-right">
+                                            <a class="btn btn-primary" href="/portfolio/">Cancel</a>
+                                            <button class="btn btn-primary" type="submit">Edit Portfolio</button>
+                                        </div>
+                                    </div>
+
+	                            	  <div style="clear: both;"></div>
+
+                                    <div id="projectmodal" class="modal fade" role="dialog">
+                                    <div class="modal-dialog modal-lg">
+
+                        <!-- Modal content-->
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">Select Projects</h4>
+                                      </div>
+                                      <div class="modal-body">
+                                        <div clsas="row ">
+                                            {% for project in projects%}
+                                              <div class="col-lg-6 projects" >
+            <input type="checkbox" style="display: none;" checked="checked"
+                                                                   name="project"
+                                                                   value="{{project.id}}">
+                <div class="hpanel hgreen">
+                    <div class="panel-body">
+                        <!--<span class="label label-success pull-right">NEW</span>-->
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <h4><a href="/project/view/{{project.id}}">{{project.title | slice:':15'}}...</a></h4>
+
+                                <p style="height: 70px;">
+                                   {{project.description | striptags | safe | slice:':100'}}...
+                                </p>
+
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="project-label">CLIENT</div>
+                                        <small>{{project.clientname}}</small>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="project-label">START</div>
+                                        <small>{{project.startdate}}</small>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="project-label">ENDS</div>
+                                        <small>{{project.enddate}}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 project-info" style="padding-left: 0px;">
+                                <div class="project-value">
+                                    <h2 class="text-success" style="    margin-top: 10px;font-size: 14px;margin-bottom: 10px;">
+
+                                    </h2>
+                                </div>
+                                <div class="project-people">
+                                    {% for media in project.projectmedia_set.all %}
+                                        <a href="/media/{{media.file}}" data-toggle="lightbox" data-title="{{media.project.title}}"
+                                           data-gallery="multiimages">
+									        <img alt="logo" class="img-circle" src="/media/{{media.file}}">
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <a target="_blank" href="{{project.url}}">{{project.url }}</a>
+                        <i class="fa fa-check-circle color-green" style="color: green !important;font-size: 20px;float: right;"></i>
+                    </div>
+                </div>
+            </div>
+                                            {% endfor %}
+                                    {% for project in allprojects%}
+                                        <div class="col-lg-6 projects" >
+            <input type="checkbox" style="display: none;"
+                                                                   name="project"
+                                                                   value="{{project.id}}">
+                <div class="hpanel hgreen">
+                    <div class="panel-body">
+                        <!--<span class="label label-success pull-right">NEW</span>-->
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <h4><a href="/project/view/{{project.id}}">{{project.title | slice:':15'}}...</a></h4>
+
+                                <p style="height: 70px;">
+                                   {{project.description | striptags | safe | slice:':100'}}...
+                                </p>
+
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="project-label">CLIENT</div>
+                                        <small>{{project.clientname}}</small>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="project-label">START</div>
+                                        <small>{{project.startdate}}</small>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="project-label">ENDS</div>
+                                        <small>{{project.enddate}}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 project-info" style="padding-left: 0px;">
+                                <div class="project-value">
+                                    <h2 class="text-success" style="    margin-top: 10px;font-size: 14px;margin-bottom: 10px;">
+
+                                    </h2>
+                                </div>
+                                <div class="project-people">
+                                    {% for media in project.projectmedia_set.all %}
+                                        <a href="/media/{{media.file}}" data-toggle="lightbox" data-title="{{media.project.title}}"
+                                           data-gallery="multiimages">
+									        <img alt="logo" class="img-circle" src="/media/{{media.file}}">
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <a target="_blank" href="{{project.url}}">{{project.url }}</a>
+                        <i class="fa fa-circle-thin color-green" style="color: green !important;font-size: 20px;float: right;"></i>
+                    </div>
+                </div>
+            </div>
+                                    {% endfor %}
+                                </div>
+                              <div style="clear: both;"></div>
+                        </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-primary btn-done">Done</button>
+                          </div>
+                        </div>
+
+                         </div>
+                                </div>
+                                </form>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    </div>
+{% endblock %}
+
+{% block script%}
+	<script type="application/javascript">
+		$(function () {
+		    selectedprojects = $('#projectmodal').find('[name="project"]:checked').length;
+			$('#addproject').empty();
+			$('#addproject').html(selectedprojects + ' project(s) selected');
+		})
+	</script>
+{%endblock%}

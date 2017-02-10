@@ -1,0 +1,80 @@
+{% extends 'base/legendmaster.html' %}
+{%load get_profile_extra%}
+{% load urls %}
+{% block content %}
+<div class="searchbar">
+    <form action="/public/searchcontacts/" method="get">
+
+             <div class="form-group divinput"style=" margin-right: 155px;margin-top:-4px;" >
+
+                <input type="text" style="width:400px" value="{{first_name}}"
+                       placeholder="First name / Last name / Email" name="first_name"
+                       class="form-control onfocusofinput"/>
+            </div>
+
+
+                <div class="cleafix"></div>
+                <div class="form-group" style="float: right;
+            margin-top:-15px;  margin-right: 154px;" >
+
+                <button style="border-radius: 0px;" type="submit" class="btn btn-primary">Search</button>
+            </div>
+        <div class="cleafix"></div>
+     </form>
+</div>
+
+<div class="container">
+    <h3>Teams</h3>
+<div class="row">
+
+            <div style="margin-top:39px !important;">
+
+
+                  <div class="col-md-12">
+                  {%for team in teams%}
+                    <div class="col-sm-6" style="margin-bottom:40px;">
+
+                            <div class="well well-light well-sm no-margin no-padding">
+                              <div class="row">
+                                            <div class="col-sm-3 ">
+                                                <a href="javascript://">
+                                                    <img src="/static/design/assets/img/no-Image.png" class="imagemargin">
+                                                </a>
+                                                <div class="padding-10">
+                                                    <h4 class="font-md"><strong></strong>
+                                                    <br>
+                                                    <small></small></h4>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <h1 class="h1cls">{{team.teamname}}
+
+                                                <br>
+                                                <small> {{team.status}}</small></h1>
+                                            </div>
+                                            <div class="col-sm-3" style="padding-left:0px;">
+                                            </div>
+                                        </div>
+
+                            </div>
+
+                    </div>
+{%endfor%}
+                <div class="clearfix"></div>
+
+                      </div>
+
+            </div>
+
+
+
+
+
+        </div>
+    <a href="/team/new/">Create Team</a>
+    </div>
+
+
+
+{% endblock %}

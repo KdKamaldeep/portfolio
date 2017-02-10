@@ -1,0 +1,70 @@
+{% extends 'base/legendmaster.html' %}
+{% block content %}
+<div class="container">
+<a title="Add Project" href="/project/new/" data-toggle="tooltip" class="btn btn-success rightfloatbutton">+</a>
+        <div class="row">
+ <div class="header" style="padding-left: 20px !important;    margin-top: 25px !important;">
+                <h4 class="title">Your Project(s)</h4>
+     </div>
+			 {% if projects|length <= 0 %}
+
+				<div class="col-lg-12">
+					<div class="card">
+					   <div class="header">
+							<h4 class="title">No Projects</h4>
+						</div>
+						<div class="content">
+						   You don't have any Projects. Click on Add Project button at bottom to create a project.
+						</div>
+					</div>
+				</div>
+            {% endif %}
+			{% for project in projects %}
+
+ 				<div class="col-md-4 cardnotchoosen">
+					  <div class="card card-user contentcard180">
+								<div class="image">
+									<img src="/media/{{project.projectpic}}" alt="...">
+								</div>
+								<div class="content">
+									<div class="author cardauthornomargin">
+										  <h4 class="title" style="font-size: 16px;">
+                                              {{project.title|slice:':30'}}...<br>
+											 <small>{{project.services|slice:':40'}}...</small>
+											  <a href="{{project.url}}" style="font-size: 14px;">{{project.url}}</a>
+										  </h4>
+									</div>
+								</div>
+								<hr>
+								<div class="text-center bntcontainer" style="padding: 10px;">
+									<a class="btn-simple" title="View Portfolio" href="/project/view/{{project.id}}">
+										<i class="fa fa-folder-open" aria-hidden="true" title="View Project"></i>
+									</a>
+									<a class="btn-simple" href="/project/open/{{project.id}}"
+									   title="Edit Project">
+										<i alt="Edit Project" class="fa fa-edit" aria-hidden="true"></i>
+									</a>
+									<a class="btn-simple anchorremove" title="Remove" href="/project/remove/{{project.id}}">
+										<i class="fa fa-times" aria-hidden="true" title="Remove"></i>
+									</a>
+								</div>
+							</div>
+ 				</div>
+
+				<!--<figure class="effect-zoe print ui" style="position: absolute; left: 0px; top: 0px;">
+					<img src="/media/{{project.projectpic}}" alt="" width="300" height="316">
+					<figcaption>
+						<h2 class="title">{{project.title}}</h2>
+						<p class="links">
+							<a target="_blank" href="{{project.url}}">Visit project</a> |
+							<a href="http://www.gettemplate.com/demo/progressus-pro/portfolio-item.html">View Details</a>
+							| <a href="/project/open/{{project.id}}">Edit</a>
+                             | <a href="/project/remove/{{project.id}}">Delete</a>
+						</p>
+					</figcaption>
+				</figure>-->
+
+			{% endfor %}
+		</div>
+</div>
+{% endblock %}

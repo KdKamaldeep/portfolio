@@ -1,0 +1,124 @@
+{%load get_profile_extra%}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Portfolio</title>
+    <link href="/static/new-design/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/new-design/assets/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <!-- Toastr style -->
+    <link href="/static/new-design/assets/css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <link href="/static/new-design/assets/css/animate.css" rel="stylesheet">
+    <link href="/static/new-design/assets/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="ibox">
+                        <div class="ibox-title">
+                            <h5>IT-01 - Design Team </h5>
+
+
+                            {% already_team_member inviteduser_id teamid  as already_team_member %}
+                            {%block status%}
+                             {% if already_team_member == True %}
+                                 <a href="Javascript://" style="text-align: right;float: right;margin-right: 10px;"
+                                    disabled="disabled"
+                               class="acceptrejectbutton btn btn-xs btn-default">
+                                     <i class="fa fa-check"></i>Invitation Accepted</a>
+                            {%else%}
+                                <a href="Javascript://" style="text-align: right;float: right;margin-right: 10px;"
+                                   class="acceptrejectbutton btn btn-xs btn-default"
+                                   teamid="{{teamid}}"
+                                   inviteduser_id="{{inviteduser_id}}" requestaction="accept">Accept Invite</a>
+                                <a href="Javascript://" style="text-align: right;float: right;margin-right: 10px;"
+                                   class="acceptrejectbutton btn btn-xs btn-default" id="rejectbutton"
+                                   teamid="{{teamid}}"
+                                   inviteduser_id="{{inviteduser_id}}" requestaction="reject">Reject Invite</a>
+                            {%endif%}
+                            {%endblock%}
+
+                        </div>
+                        <div class="ibox-content">
+                            <div class="team-members">
+                                 {% for teaminvite in teaminvitation%}
+                                    {% if teaminvite.status == "PENDING"%}
+                                        <a href="#"><img alt="member" style="opacity:0.5;" class="img-circle" src="/static/new-design/assets/img/a1.jpg" ></a>
+                                    {% elif teaminvite.status == "ACCEPTED"%}
+                                        <a href="#"><img alt="member" class="img-circle" src="/static/new-design/assets/img/a2.jpg"></a>
+                                    {% endif%}
+                                {%endfor%}
+                            </div>
+
+
+                            <h4>Info about Design Team</h4>
+                            <p>
+                                It is a long established fact that a reader will be distracted by the readable content
+                                of a page when looking at its layout. The point of using Lorem Ipsum is that it has.
+                            </p>
+                            <div>
+                                <span>Status of current project:</span>
+                                <div class="stat-percent">48%</div>
+                                <div class="progress progress-mini">
+                                    <div style="width: 48%;" class="progress-bar"></div>
+                                </div>
+                            </div>
+                            <div class="row  m-t-sm">
+                                <div class="col-sm-4">
+                                    <div class="font-bold">PROJECTS</div>
+                                    12
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="font-bold">RANKING</div>
+                                    4th
+                                </div>
+                                <div class="col-sm-4 text-right">
+                                    <div class="font-bold">BUDGET</div>
+                                    $200,913 <i class="fa fa-level-up text-navy"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    <!-- Mainly scripts -->
+    <script src="/static/new-design/assets/js/jquery-2.1.1.js"></script>
+    <script src="/static/new-design/assets/js/bootstrap.min.js"></script>
+    <script src="/static/new-design/assets/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/static/new-design/assets/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <!-- Custom and plugin javascript -->
+    <script src="/static/new-design/assets/js/inspinia.js"></script>
+    <script src="/static/new-design/assets/js/plugins/pace/pace.min.js"></script>
+
+{% block script %}
+
+<script type="text/javascript">
+
+ $(document).ready(function() {
+
+  $('.acceptrejectbutton').bind('click', function(){
+        var self = $(this);
+        var inviteduser_id = self.attr('inviteduser_id');
+        var teamid = self.attr('teamid');
+        var action = self.attr('requestaction');
+        $.get('/team/accept_reject_invitation_request/'+inviteduser_id+'/'+teamid+'/'+ action, function () {
+            if(action == "accept"){
+                self.empty()
+                self.html('<i class="fa fa-check" aria-hidden="true"></i> Invitation Accepted')
+                self.attr('disabled','disabled');
+                $('#rejectbutton').hide();
+            }
+            if(action == "reject"){
+                window.location = '/portfolio/';
+            }
+        });
+    });
+
+});
+</script>
+
+{% endblock %}
+</body>
+</html>

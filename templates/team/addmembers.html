@@ -1,0 +1,267 @@
+{% extends 'base/legendmaster.html' %}
+{%load get_profile_extra%}
+{% load urls %}
+{% block content %}
+
+
+<div class="searchbar">
+    <form action="/public/searchcontacts/" method="get">
+
+             <div class="form-group divinput"style=" margin-right: 155px;margin-top:-4px;" >
+
+                <input type="text" style="width:400px" value="{{first_name}}"
+                       placeholder="First name / Last name / Email" name="first_name"
+                       class="form-control onfocusofinput"/>
+            </div>
+
+
+                <div class="cleafix"></div>
+                <div class="form-group" style="float: right;
+            margin-top:-15px;  margin-right: 154px;" >
+
+                <button style="border-radius: 0px;" type="submit" class="btn btn-primary">Search</button>
+            </div>
+        <div class="cleafix"></div>
+     </form>
+</div>
+
+<div class="container">
+    <div class="row">
+
+        <div class="col-md-12">
+            {% if userprofiles|length <= 0 %}
+                <div class="cards">
+                   <div class="header">
+                        <h4 class="title">Nothing Found!</h4>
+                    </div>
+                    <div class="content">
+                       We did not found any contact(s) that match your search criteria.
+                    </div>
+                </div>
+        {% endif %}
+
+            <div class="clearfix"></div>
+
+            <div style="margin-top:20px !important;">
+                {% for profile in userprofiles%}
+                {% get_user_contacts_by_userid profile.user.id as usercontacts%}
+                {% invitation_already_sent teamid profile.user.id as invite_already_sent %}
+                    <div class="col-sm-6" style="margin-bottom:40px;">
+                            <div class="well well-light well-sm no-margin no-padding" >
+                              <div class="row">
+                                            <div class="col-sm-3 profile-pic">
+                                                <a href="/public/viewprofile/{{profile.user.id}}/yes">
+                                                    <img src="{% profile_pic profile %}">
+                                                </a>
+                                                <div class="padding-10">
+                                                    <h4 class="font-md"><strong>1,543</strong>
+                                                    <br>
+                                                    <small>Followers
+                                                    </small></h4>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <h1 class="h1cls">{{profile.user.first_name}}
+                                                    <span class="semi-bold">{{profile.user.last_name}}</span>
+                                                <br>
+                                                <small> {{profile.position}}</small></h1>
+
+                                                <ul class="list-unstyled">
+                                                    <li>
+                                                        <p class="text-muted">
+                                                            <i class="fa fa-phone"></i>&nbsp;&nbsp;
+                                                            {%if profile.phoneno%}
+                                                            {{profile.phoneno}}
+                                                            {%else%}
+                                                            N/A
+                                                            {%endif%}
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p class="text-muted">
+                                                            <i class="fa fa-envelope"></i>&nbsp;&nbsp;
+                                                            <a href="mailto:{{profile.user.email}}">
+                                                                {{profile.user.email | slice:':20'}}</a>
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p class="text-muted">
+                                                            <i class="fa fa-skype"></i>&nbsp;&nbsp;
+                                                            <span class="txt-color-darken">
+                                                                {% if profile.skypeid %}
+                                                                {{profile.skypeid}}
+                                                                {%else%}
+                                                                N/A
+                                                                {%endif%}
+                                                            </span>
+                                                        </p>
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                 <div style="padding:10px">
+
+                                        {%if invite_already_sent == True%}
+                                         <a href="javascript:void(0);" disabled="disabled" class="btn btn-default btn-xs teaminvitebutton"
+                                         touserid="{{profile.user.id}}" fromteamid="{{teamid}}" id="invitationsent{{profile.user.id}}">
+                                            <i class="fa fa-check"></i> Invitation Request Sent
+                                         </a>
+                                        <a href="javascript:void(0);" class="btn btn-default btn-xs  removeinvitebutton"
+                                           touserid="{{profile.user.id}}" fromteamid="{{teamid}}"  id="removeinvite{{profile.user.id}}">
+                                            <i class="fa fa-times"></i> Remove From List
+                                         </a>
+                                        {%else%}
+                                        <a href="javascript:void(0);"  class="btn btn-default btn-xs teaminvitebutton" id="send{{profile.user.id}}"
+                                           touserid="{{profile.user.id}}" fromteamid="{{teamid}}" >
+                                            <i class="fa fa-envelope-o" ></i> Send invitation Request
+                                        </a>
+                                        <a href="javascript:void(0);" class="btn btn-default btn-xs  removeinvitebutton"
+                                           touserid="{{profile.user.id}}" fromteamid="{{teamid}}" style="visibility:hidden" id="{{profile.user.id}}" >
+                                            <i class="fa fa-times"></i> Remove From List
+                                        </a>
+
+
+                                     {%endif%}
+
+
+                                 </div>
+
+                            </div>
+                    </div>
+                {%endfor%}
+                <div class="clearfix"></div>
+            </div>
+
+
+            {% if userprofiles|length > 0%}
+                <ul class="pagination" style="float: right">
+                    {% if userprofiles.has_previous %}
+                        <li><a href="{% add_params request.get_full_path page=userprofiles.previous_page_number %}">Prev</a></li>
+                    {%else%}
+                        <li><span class="currentpage">Prev</span></li>
+                    {% endif %}
+                    {% for page in userprofiles.paginator.page_range %}
+                        {% ifequal page userprofiles.number %}
+                            <li><span class="currentpage">{{page}}</span></li>
+                            {% else %}
+                            <li><a href="{% add_params request.get_full_path page=page %}">{{page}}</a></li>
+                        {% endifequal  %}
+                    {% endfor %}
+                    {% if userprofiles.has_next %}
+                        <li><a href="{% add_params request.get_full_path page=userprofiles.next_page_number %}">Next</a></li>
+                    {%else%}
+                        <li><span class="currentpage">Next</span></li>
+                    {% endif %}
+                </ul>
+            {%endif%}
+        </div>
+    </div>
+ </div>
+
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+ $(document).ready(function() {
+
+  $('.teaminvitebutton').bind('click', function(){
+        var userid = $(this).attr('touserid')
+        var teamid = $(this).attr('fromteamid')
+        var self = $(this);
+
+        div = $('.infomessage');
+        var image = $('<img />')
+                .attr({'src':'/static/design/assets/img/loading.gif',
+                'style':'width: 15px;height: auto;margin-right: 8px;margin-left: 2px;margin-top: -2px;'})
+
+         if(div.length>0){
+            div.show()
+        }
+        else
+        {
+            self.find('img').remove()
+            self.append(image)
+            self.attr('disabled','disabled')
+            $.get('/team/sendteaminvitation/'+teamid+'/'+userid, function(response){
+                self.empty()
+                self.html('<i class="fa fa-check" aria-hidden="true"></i> Invitation Request Sent')
+
+                $('#'+userid).css('visibility','visible');
+                $('#'+userid).removeAttr('disabled');
+                $('#'+userid).find('img').remove();
+
+
+
+                var sendbutton = $('#removeinvite'+userid);
+                console.log($('#removeinvite'+userid).attr('userid'));
+                sendbutton.css('visibility','visible')
+                sendbutton.find('img').remove();
+                sendbutton.removeAttr('disabled');
+                //sendbutton.empty();
+                //sendbutton.addClass('removeinvitebutton');
+                //sendbutton.html('<i class="fa fa-envelope-o" aria-hidden="true"></i> Remove From List')
+                //sendbutton.removeAttr('disabled');
+
+
+
+
+            })
+        }
+
+    });
+
+
+
+
+    $('.removeinvitebutton').bind('click', function(){
+
+    console.log("A");
+
+
+        var userid = $(this).attr('touserid')
+        var teamid = $(this).attr('fromteamid')
+
+        console.log(userid);
+        console.log(teamid);
+
+        var self = $(this);
+        div = $('.infomessage');
+        var image = $('<img />')
+                .attr({'src':'/static/design/assets/img/loading.gif',
+                'style':'width: 15px;height: auto;margin-right: 8px;margin-left: 2px;margin-top: -2px;'})
+
+         if(div.length>0){
+            div.show()
+        }
+        else
+        {
+            self.find('img').remove()
+            self.append(image)
+            self.attr('disabled','disabled')
+            $.get('/team/removeteaminvitation/'+teamid+'/'+userid, function(response){
+                var sendbutton = $('#send'+userid);
+                sendbutton.empty();
+                sendbutton.addClass('teaminvitebutton');
+                sendbutton.html('<i class="fa fa-envelope-o" aria-hidden="true"></i> Send invitation Request')
+                sendbutton.removeAttr('disabled');
+                self.css('visibility','hidden')
+
+                var isendbutton = $('#invitationsent'+userid);
+                isendbutton.empty();
+                isendbutton.addClass('teaminvitebutton');
+                isendbutton.html('<i class="fa fa-envelope-o" aria-hidden="true"></i> Send invitation Request')
+                isendbutton.removeAttr('disabled');
+
+            })
+        }
+
+
+
+    });
+
+
+
+});
+</script>
+{% endblock %}

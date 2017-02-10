@@ -1,0 +1,143 @@
+{% extends 'base/legendmaster.html' %}
+{% block content %}
+<div class="container">
+    <div class="row projects">
+        <div class="header" style="margin-top:20px; padding-left: 20px !important;  ">
+                <h4 class="title">Public Portfolio(s)</h4>
+        </div>
+        <a title="Add Portfolio" href="/portfolio/new/"
+           data-toggle="tooltip" class="btn btn-success rightfloatbutton">+</a>
+         {% if publicportfolios|length <= 0 %}
+               <p style="    margin-left: 20px;">You don't have any public portfolios. Click on <i alt="ADD TO PUBLIC LSIT" class="fa fa-bullhorn" aria-hidden="true"></i>
+               link on a portfolio to make it public.</p>
+        {% endif %}
+		{% for portfolio in publicportfolios %}
+            <div class="col-lg-6">
+                <div class="hpanel hgreen">
+                    <div class="panel-body">
+                        <!--<span class="label label-success pull-right">NEW</span>-->
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <h4 style="margin-top: 0px;"><a href="#">{{portfolio.title}}</a></h4>
+
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <div class="project-label">TOTAL VIEWS</div>
+                                        <small>{{portfolio.hitcount}} view(s)</small>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="project-label">TOTAL PROJECTS</div>
+                                        <small>{{portfolio.totalprojects}} project(s)</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 project-info" style="padding-left: 0px;">
+                                <div class="project-action m-t-md">
+                                    <div class="btn-group">
+                                        <a href="/portfolio/view/{{portfolio.uuid}}" class="btn btn-xs btn-default">View</a>
+                                        <a  href="/portfolio/open/{{portfolio.id}}" class="btn btn-xs btn-default"> Edit</a>
+                                        <a  href="/portfolio/removeportfolio/{{portfolio.id}}" class="btn btn-xs btn-default anchorremove"> Delete</a>
+                                    </div>
+                                </div>
+                                <div class="project-value">
+                                    <h2 class="text-success" style="    margin-top: 10px;font-size: 14px;margin-bottom: 10px;">
+
+                                    </h2>
+                                </div>
+                                <div class="project-people">
+                                   <!-- <a href="/media/{{portfolio.snapshot}}" data-toggle="lightbox" data-title="{{portfolio.title}}"
+                                           data-gallery="multiimages">
+									        <img alt="logo" style="height: 68px;width: 68px;" class="img-circle" src="/media/{{portfolio.snapshot}}">
+                                    </a>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <a target="_blank" href="http://{{portfolio.portfolio_url}}.{{portfolio.portfolio_host}}">http://{{portfolio.portfolio_url}}.{{portfolio.portfolio_host}}</a>
+                        <a style="float: right;" class="btn btn-xs btn-default"  href="/portfolio/makepublic/{{portfolio.id}}">
+                                            Remove From Public List
+                         </a>
+                    </div>
+                </div>
+            </div>
+		{% endfor %}
+
+         <div class="clearfix"></div>
+        <hr />
+        <div class="header" style=" padding-left: 20px !important;  margin-top: 25px !important;">
+                <h4 class="title">Private Portfolio(s)</h4>
+         </div>
+        {% if unpublicportfolios|length <= 0 %}
+         <p style="    margin-left: 20px;">You don't have any portfolios. Click on + button at bottom of the page to create a new portfolio.</p>
+        {%endif%}
+        {% for portfolio in unpublicportfolios %}
+            <div class="col-lg-6">
+                <div class="hpanel hgreen">
+                    <div class="panel-body">
+                        <!--<span class="label label-success pull-right">NEW</span>-->
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <h4><a href="/project/view/{{project.id}}">{{portfolio.title}}</a></h4>
+
+                                <!--<p>
+                                   {{portfolio.desc | slice:':100'}}...
+                                </p>-->
+
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <div class="project-label">TOTAL VIEWS</div>
+                                        <small>{{portfolio.hitcount}} view(s)</small>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="project-label">TOTAL PROJECTS</div>
+                                        <small>{{portfolio.totalprojects}} project(s)</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 project-info" style="padding-left: 0px;">
+                                <div class="project-action m-t-md">
+                                    <div class="btn-group">
+                                        <a href="/portfolio/view/{{portfolio.uuid}}" class="btn btn-xs btn-default"> View</a>
+                                        <a  href="/portfolio/open/{{portfolio.id}}" class="btn btn-xs btn-default"> Edit</a>
+                                        <a  href="/portfolio/removeportfolio/{{portfolio.id}}" class="btn btn-xs btn-default anchorremove"> Delete</a>
+                                    </div>
+                                </div>
+                                <div class="project-value">
+                                    <h2 class="text-success" style="    margin-top: 10px;font-size: 14px;margin-bottom: 10px;">
+
+                                    </h2>
+                                </div>
+                                <div class="project-people">
+                                    <!--<a href="/media/{{portfolio.snapshot}}" data-toggle="lightbox" data-title="{{portfolio.title}}"
+                                           data-gallery="multiimages">
+									        <img alt="logo" style="height: 68px;width: 68px;" class="img-circle" src="/media/{{portfolio.snapshot}}">
+                                    </a>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+
+                        <a style="float:right;"  class="btn btn-xs btn-default"  href="/portfolio/makepublic/{{portfolio.id}}">
+                                            Add To Public List
+                         </a>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+		{% endfor %}
+
+</div>
+</div>
+{% endblock %}
+
+{% block script%}
+	<script type="application/javascript">
+		$(function () {
+            $('.btncopy').bind('click', function () {
+
+            })
+		})
+	</script>
+{%endblock%}

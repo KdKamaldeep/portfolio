@@ -1,0 +1,83 @@
+{% extends 'base/legendmaster.html' %}
+{%load get_profile_extra%}
+{% load urls %}
+{% block content %}
+
+    <link href="/static/new-design/assets/css/style.css" rel="stylesheet">
+    <link href="/static/design/assets/css/style.css" rel="stylesheet">
+
+
+        <div class="container">
+            <div class="row">
+              <div class="wrapper-content animated fadeInRight">
+
+                  {% for teamlst in teamlist%}
+                    <div class="col-lg-4">
+                        <div class="ibox">
+                        <div class="ibox-title">
+                            <a href="/team/teamboard/{{inviteduser_id}}/{{teamlst.team.id}}">
+                                <span class="label label-primary pull-right">VIEW DETAILS</span>
+                            </a>
+                            <h5>{{teamlst.team.teamname | title}}</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <div class="team-members">
+                                {% count_team_member teamlst.team.id as teammember %}
+
+                                {% for teammeb in teammember.teammembers %}
+                                    {% if teammeb.status == "PENDING"%}
+                                        <a href="#"><img alt="member" class="img-circle" style="opacity:0.5;"
+                                                     src="{%user_profile_pic_by_id teammeb.inviteduser_id%}"></a>
+                                    {%else%}
+                                        <a href="#"><img alt="member" class="img-circle"
+                                                     src="{%user_profile_pic_by_id teammeb.inviteduser_id%}"></a>
+                                    {%endif%}
+                                {%endfor%}
+
+                                {% if teammember.showmore == True %}
+                                        <span><a href="javascript:void(0);">{{teammember.leftmember}} more</a></span>
+                                {% endif %}
+
+
+                            </div>
+                            <h4>Info about {{teamlst.team.teamname | title}}</h4>
+                            <p>
+                               {{teamlst.team.aboutteam | truncatechars:50 }}
+                            </p>
+                            <div>
+                                <span>Status of current project:</span>
+                                <div class="stat-percent">48%</div>
+                                <div class="progress progress-mini">
+                                    <div style="width: 48%;" class="progress-bar"></div>
+                                </div>
+                            </div>
+                            <div class="row  m-t-sm">
+                                <div class="col-sm-4">
+                                    <div class="font-bold">PROJECTS</div>
+                                    12
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="font-bold">RANKING</div>
+                                    4th
+                                </div>
+                                <div class="col-sm-4 text-right">
+                                    <div class="font-bold">BUDGET</div>
+                                    $200,913 <i class="fa fa-level-up text-navy"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+
+
+                  {%endfor%}
+
+
+              </div>
+            </div>
+        </div>
+
+
+
+
+{%endblock%}

@@ -1,0 +1,205 @@
+{% extends 'base/legendmaster.html' %}
+{%load get_profile_extra%}
+{% load urls %}
+{%block searchcontent%}
+<div class="searchbar">
+
+    <form action="/public/searchcontacts/" method="get">
+             <div class="form-group divinput" >
+
+                <input type="text" style="width:400px" value="{{first_name}}"
+                       placeholder="First name / Last name / Email" name="first_name"
+                       class="form-control onfocusofinput"/>
+            </div>
+            {%csrf_token%}
+
+                <div class="cleafix"></div>
+                <div class="form-group" style="float: right;
+            margin-top: -15px;" >
+
+                <button style="border-radius: 0px;" type="submit" class="btn btn-primary">Search</button>
+            </div>
+        <div class="cleafix"></div>
+     </form>
+</div>
+{%endblock%}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+
+
+
+        <div class="col-md-12">
+            {% if userprofiles|length <= 0 %}
+                <div class="cards">
+                   <div class="header">
+                        <h4 class="title">Nothing Found!</h4>
+                    </div>
+                    <div class="content">
+                       We did not found any contact(s) that match your search criteria.
+                    </div>
+                </div>
+        {% endif %}
+
+            <div class="clearfix"></div>
+
+            <div style="margin-top:20px !important;">
+                {% for profile in userprofiles%}
+                {% get_user_contacts_by_userid profile.user.id as usercontacts%}
+                {% already_contact request.user.id  profile.user.id as already_a_contact %}
+                {% request_already_sent request.user.id profile.user.id as contact_request_sent %}
+                    <div class="col-sm-6" style="margin-bottom:40px;">
+                            <div class="well well-light well-sm no-margin no-padding" >
+                              <div class="row">
+                                            <div class="col-sm-3 profile-pic">
+                                                <a href="/public/viewprofile/{{profile.user.id}}/yes">
+                                                    <img src="{% profile_pic profile %}">
+                                                </a>
+                                                <div class="padding-10">
+                                                    <h4 class="font-md"><strong>1,543</strong>
+                                                    <br>
+                                                    <small>Followers</small></h4>
+                                                {% if usercontacts.totalcontacts %}
+                                                    <h4 class="font-md">
+                                                        <strong>
+
+                                                          {{usercontacts.totalcontacts}}
+
+                                                        </strong>
+                                                        <small>Connections</small>
+                                                    </h4>
+                                                 {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <h1 class="h1cls">{{profile.user.first_name}}
+                                                    <span class="semi-bold">{{profile.user.last_name}}</span>
+                                                <br>
+                                                <small> {{profile.position}}</small></h1>
+
+                                                <ul class="list-unstyled">
+                                                    <li>
+                                                        <p class="text-muted">
+                                                            <i class="fa fa-phone"></i>&nbsp;&nbsp;
+                                                            {%if profile.phoneno%}
+                                                            {{profile.phoneno}}
+                                                            {%else%}
+                                                            N/A
+                                                            {%endif%}
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p class="text-muted">
+                                                            <i class="fa fa-envelope"></i>&nbsp;&nbsp;
+                                                            <a href="mailto:{{profile.user.email}}">
+                                                                {{profile.user.email | slice:':20'}}</a>
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p class="text-muted">
+                                                            <i class="fa fa-skype"></i>&nbsp;&nbsp;
+                                                            <span class="txt-color-darken">N/A</span>
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p class="text-muted">
+                                                            <i class="fa fa-calendar"></i>&nbsp;&nbsp;
+                                                            <span class="txt-color-darken">Free after
+                                                                <a href="javascript:void(0);" rel="tooltip"
+                                                                   title="" data-placement="top"
+                                                                   data-original-title="Create an Appointment">
+                                                                    4:30 PM
+                                                                </a>
+                                                            </span>
+                                                        </p>
+                                                    </li>
+                                                </ul>
+
+                                                <br>
+                                                <br>
+
+                                            </div>
+                                            <div class="col-sm-3" style="padding-left:0px;">
+                                                {% if usercontacts.usercontacts|length > 0 %}
+                                                <h1 class="h1cls" style="margin-left:-7px;"><small>Connections</small></h1>
+                                                    <ul class="list-inline friends-list">
+                                                        {% for contact in usercontacts.usercontacts %}
+                                                            <li>
+
+                                                                <a href="/public/viewprofile/{{contact.contact.id}}/yes"
+                                                                data-poload="/public/viewprofile/{{contact.contact.id}}/no"
+                                                                data-url="/public/viewprofile/{{contact.contact.id}}/no">
+                                                                <img src="{% user_profile_pic contact.contact %}"
+                                                                     alt="{{contact.contact.first_name}}">
+                                                                </a>
+                                                            </li>
+                                                        {% endfor %}
+                                                        {% if usercontacts.showmore == True %}
+                                                            <li>
+													            <a href="javascript:void(0);">{{usercontacts.leftcontacts}} more</a>
+												            </li>
+                                                        {% endif %}
+                                                    </ul>
+                                                {% else %}
+                                                    <h1 class="h1cls" style="margin-left:-7px;"><small>No Connections</small></h1>
+                                                {%endif%}
+
+                                            </div>
+                                        </div>
+                                <div style="padding:10px">
+                                    <a href="javascript:void(0);" class="btn btn-default btn-xs">
+                                                        <i class="fa fa-envelope-o"></i> Send Message</a>
+
+                                    <a href="javascript:void(0);" class="btn btn-default btn-xs">
+                                        <i class="fa fa-envelope-o"></i> Follow {{profile.user.first_name}}
+                                        {{profile.user.last_name}}
+                                    </a>
+                                    {% if already_a_contact == True %}
+                                        <a href="javascript:void(0);" disabled="disabled" class="btn btn-default btn-xs">
+                                            <i class="fa fa-check"></i> Already a Contact
+                                        </a>
+                                    {% elif contact_request_sent == True%}
+                                         <a href="javascript:void(0);" disabled="disabled" class="btn btn-default btn-xs">
+                                            <i class="fa fa-check"></i> Contact Request Sent
+                                         </a>
+                                    {% else %}
+                                        <a href="javascript:void(0);"  class="btn btn-default btn-xs contactrequestbutton"
+                                        to-contact-id="{{profile.user.id}}">
+                                        <i class="fa fa-envelope-o"></i> Send Contact Request
+                                    </a>
+                                    {% endif %}
+
+                                 </div>
+                            </div>
+                    </div>
+                {%endfor%}
+                <div class="clearfix"></div>
+            </div>
+
+
+            {% if userprofiles|length > 0%}
+                <ul class="pagination" style="float: right">
+                    {% if userprofiles.has_previous %}
+                        <li><a href="{% add_params request.get_full_path page=userprofiles.previous_page_number %}">Prev</a></li>
+                    {%else%}
+                        <li><span class="currentpage">Prev</span></li>
+                    {% endif %}
+                    {% for page in userprofiles.paginator.page_range %}
+                        {% ifequal page userprofiles.number %}
+                            <li><span class="currentpage">{{page}}</span></li>
+                            {% else %}
+                            <li><a href="{% add_params request.get_full_path page=page %}">{{page}}</a></li>
+                        {% endifequal  %}
+                    {% endfor %}
+                    {% if userprofiles.has_next %}
+                        <li><a href="{% add_params request.get_full_path page=userprofiles.next_page_number %}">Next</a></li>
+                    {%else%}
+                        <li><span class="currentpage">Next</span></li>
+                    {% endif %}
+                </ul>
+            {%endif%}
+        </div>
+    </div>
+ </div>
+{% endblock %}

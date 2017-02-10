@@ -1,0 +1,254 @@
+{% extends 'base/legendmaster.html' %}
+{% load comments %}
+ {% load humanize %}
+{% load get_user_profile %}
+{% block content %}
+    <div class="container">
+        <div class="row margin-vert-30">
+            <!-- Main Column -->
+            <div class="col-md-9">
+                <div class="blog-post">
+                    <div class="blog-item-header">
+                        <h2>
+                            <a href="{{project.url}}" target="_blank">
+                                {{project.title}}
+                            </a>
+                        </h2>
+                    </div>
+                    <div class="blog-post-details">
+                        <!-- Author Name -->
+                        <div class="blog-post-details-item blog-post-details-item-left user-icon">
+                            <i class="fa fa-user color-gray-light"></i>
+                            <a href="#">{{project.user.first_name}} {{project.user.last_name}}</a>
+                        </div>
+                        <!-- End Author Name -->
+                        <!-- Date -->
+                        <div class="blog-post-details-item blog-post-details-item-left">
+                            <i class="fa fa-calendar color-gray-light"></i>
+                            <a href="#">{{project.startdate}} To {{project.enddate}}</a>
+                        </div>
+                        <!-- End Date -->
+                        <!-- Tags -->
+
+                        <!-- End Tags -->
+                        <!-- # of Comments -->
+                        <div class="blog-post-details-item blog-post-details-item-left blog-post-details-item-last">
+                            <a href="#linkComment">
+                                <i class="fa fa-comments color-gray-light"></i>
+                                {% get_comment_count for project as comment_count %}
+                                {{comment_count}} comments
+                            </a>
+                        </div>
+                        <div class="blog-post-details-item blog-post-details-item-left blog-post-details-tags">
+                            <i class="fa fa-tag color-gray-light"></i>
+                            <a href="{{project.url}}">{{project.url}}</a>
+                        </div>
+                        <!-- End # of Comments -->
+                    </div>
+                    <div class="blog-item">
+                        <div class="clearfix"></div>
+                        <div class="blog-post-body row margin-top-15">
+                         <div class="col-md-12">
+                             <div id="myCarousel" class="carousel slide">
+                                    <!-- Indicators -->
+                                    <ol class="carousel-indicators">
+                                        {% for media in project.projectmedia_set.all %}
+                                            <li data-target="#myCarousel" data-slide-to="{{forloop.counter0}}" class="active"></li>
+                                        {%endfor%}
+                                    </ol>
+                                    <div class="carousel-inner">
+                                        {% for media in project.projectmedia_set.all %}
+                                            {%if forloop.counter0 <= 0 %}
+                                                <div class="item active">
+                                                {%else%}
+                                                <div class="item">
+                                            {%endif%}
+
+                                                <img src="/media/{{media.file}}" style="width:100%;height: 300px;" class="img-responsive">
+                                                <!--<div class="container">
+                                                    <div class="carousel-caption">
+                                                         <h1>Bootstrap 3 Carousel</h1>
+
+                                                        <p>Pictures slide with overlapping words</p>
+                                                        <p><a class="btn btn-lg btn-primary" href="http://getbootstrap.com">Learn More</a>
+
+                                                        </p>
+                                                    </div>
+                                                </div>-->
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                                        <span class="icon-prev"></span>
+                                    </a>
+                                    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                                        <span class="icon-next"></span>
+                                    </a>
+                                </div>
+                                <!-- /.carousel -->
+                                <!-- Marketing messaging and featurettes==================================================- ->
+                                <!-- Wrap the rest of the page in another container to center all the content. -->
+                            </div>
+							<div class="col-md-12" style="padding-top:20px;padding-bottom: 20px;">
+								<p>{{project.description | safe}}</p>
+							</div>
+                        </div>
+                        <div class="blog-item-footer">
+                            <!-- About the Author -->
+                            <div class="blog-author hpanel hgreen margin-bottom-30">
+                                <div class="panel-heading">
+                                    <h3>About the Author</h3>
+                                </div>
+                                <div class="panel-body" id="linkComment">
+                                    <div class="row">
+                                       <ul class="media-list" style="margin-top: 0px !important;">
+                                            <li class="media">
+                                                <a href="#" class="pull-left">
+                                                    <img src="/media/{{userprofile.profilepic}}" alt="" class="img-circle">
+                                                </a>
+                                                <div class="media-body">
+                                                    <strong class="text-success">{{project.user.first_name}} {{project.user.last_name}}</strong>
+                                                    <p>
+                                                        {{userprofile.aboutme}}
+                                                    </p>
+                                                </div>
+                                             </li>
+                                       </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End About the Author -->
+                            <!-- Comments -->
+                            <div  class="blog-recent-comments hpanel hgreen margin-bottom-30 ">
+                                <div class="panel-heading">
+                                    <h3>Comments</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <ul class="media-list">
+                                    {% get_comment_list for project as comment_list %}
+                                    {% for comment in comment_list %}
+
+                                    <li class="media">
+                                        <a href="#" class="pull-left">
+                                            <img src="{% getuserprofilepic  comment.user.id%}" alt="" class="img-circle">
+                                        </a>
+                                        <div class="media-body">
+                                            <span class="text-muted pull-right">
+                                                <small class="text-muted">{{comment.submit_date | naturaltime}}</small>
+                                            </span>
+                                            <strong class="text-success">{{comment.user.first_name}}</strong>
+                                            <p>
+                                                {{comment.comment}}
+                                            </p>
+                                        </div>
+                                    </li>
+
+                                {% endfor %}
+                                    <!-- Comment Form -->
+                                    {% if request.user.is_authenticated %}
+                                    <li class="list-group-item" style="border: none;">
+                                        {% get_comment_form for project as form %}
+
+                                        <div class="blog-comment-form">
+                                            <div class="row margin-top-20">
+                                                <div class="col-md-12">
+                                                    <div class="pull-left">
+                                                        <h3>Leave a Comment</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row margin-top-20">
+                                                <div class="col-md-12">
+                                                    <form action="{% comment_form_target %}" method="post">
+                                                        {% csrf_token %}
+                                                        {{form.security_hash}}
+                                                        {{form.object_pk}}
+                                                        {{form.content_type}}
+                                                        {{form.timestamp}}
+                                                        <input type="hidden" name="next" value="{{ request.path }}" />
+
+                                                        <div class="row margin-bottom-20">
+                                                            <div class="col-md-12 col-md-offset-0">
+                                                                <textarea required="required" name="comment" class="form-control" rows="8"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <p>
+                                                            <button class="btn btn-primary" type="submit">Post</button>
+                                                        </p>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!-- End Comment Form -->
+                                    {% else %}
+                                        <p>You need to <a href="/account/signin?next={{ request.path }}">Login</a> before posting a comment.
+                                        Click here to <a href="/account/signin?next={{ request.path }}">Login</a></p>
+                                    {% endif %}
+                                </ul>
+                                </div>
+                            </div>
+                            <!-- End Comments -->
+                        </div>
+                    </div>
+                </div>
+                <!-- End Blog Post -->
+            </div>
+            <!-- End Main Column -->
+            <!-- Side Column -->
+            <div class="col-md-3">
+                <!-- Blog Tags -->
+                <div class="blog-tags">
+                    <h3>Services Provided</h3>
+                    <ul class="blog-tags">
+                        {% for service in services %}
+                            <li>
+                                <a href="#" class="blog-tag">{{service}}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <!-- End Blog Tags -->
+                <!-- Recent Posts -->
+                <div class="recent-posts">
+                     <h3>Contact Information</h3>
+
+                    <ul class="posts-list profile-details margin-top-10">
+                         <li>
+                            <div><i class="fa fa-user"></i> name</div>
+                            {{project.user.first_name}} {{project.user.last_name}}
+                        </li>
+                        <li>
+                            <div><i class="fa fa-phone"></i> phone</div>
+                            {{userprofile.ext}}-{{userprofile.mobileno}}
+                        </li>
+                        <li>
+                            <div><i class="fa fa-tablet"></i> mobile phone</div>
+                            {{userprofile.mobileno}}
+                        </li>
+                        <li>
+                            <div><i class="fa fa-envelope"></i> e-mail</div>
+                            {{user.email}}
+                        </li>
+                        <li>
+                            <div><i class="fa fa-map-marker"></i> address</div>
+                            {{userprofile.address}}<br>
+                        </li>
+                    </ul>
+                </div>
+                <!-- End Recent Posts -->
+                <!-- End Side Column -->
+            </div>
+        </div>
+ </div>
+{% endblock %}
+{% block script %}
+     <script type="text/javascript">
+       $(function () {
+           $('#myCarousel').carousel({
+                interval: 3000,
+                cycle: true
+            });
+       })
+     </script>
+{% endblock %}

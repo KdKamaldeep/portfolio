@@ -1,0 +1,81 @@
+{% extends 'base/legendmaster.html' %}
+{% block content %}
+<div class="container">
+
+    <div class="row profile">
+
+            <div class="col-sm-3">
+
+                <div class="row">
+                    <div class="col-xs-7 col-sm-12">
+                        <img class="profile-image" src="/media/{{userprofile.profilepic}}">
+                    </div>
+                    <div class="col-xs-5 col-sm-12 ">
+
+                        <h3>Contact Information</h3>
+
+                        <ul class="profile-details">
+                            <li>
+                                <div><i class="fa fa-phone"></i> phone</div>
+                                {{userprofile.ext}}-{{userprofile.mobileno}}
+                            </li>
+                            <li>
+                                <div><i class="fa fa-tablet"></i> mobile </div>
+                                {{userprofile.mobileno}}
+                            </li>
+                            <li>
+                                <div><i class="fa fa-envelope"></i> e-mail</div>
+                                {{user.email}}
+                            </li>
+                            <li>
+                                <div><i class="fa fa-map-marker"></i> address</div>
+                                {{userprofile.address}}<br>
+                            </li>
+                             <li>
+                                <div><i class="fa fa-edit"></i> edit</div>
+                                <a href="/account/editprofile">Edit Profile</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div><!--/row-->
+
+            </div><!--/col-->
+
+            <div class="col-sm-9 ">
+
+                <div class="blog-author hpanel hgreen margin-bottom-30">
+
+                                    <div class="panel-body" id="linkComment">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="contactconteiner">
+                                                    <h3 style="padding: 0px;">My Skills</h3>
+                                                   <div class="media-body">
+                                                       {% for skill in userprofile.skillstolist %}
+                                                            <div style="margin-right: 10px;float: left;">
+                                                                <h5 style="background-color: #f7f9fa;padding: 10px;">{{skill}}</h5>
+                                                            </div>
+                                                        {% endfor %}
+                                                   </div>
+    <h3 style="padding: 0px;">About me</h3>
+                                                   <div class="media-body">
+
+                                                            {{userprofile.aboutme | safe}}
+
+                                                   </div>
+
+
+                                                </div>
+                                            </div>
+
+                                </div>
+    </div>
+
+
+
+            </div><!--/col-->
+
+    </div>
+    </div>
+ </div>
+{% endblock %}

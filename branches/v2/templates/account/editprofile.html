@@ -1,0 +1,221 @@
+{% extends 'base/legendmaster.html' %}
+{% block content %}
+
+<div class="container">
+<div class="row">
+
+<div class="col-md-12">
+    <div class="cards">
+         {% if saved %}
+                <div class="col-md-12">
+                    <div class="alert alert-success">
+                        Your changes has been saved!
+                    </div>
+                </div>
+            {% endif %}
+        <div class="header">
+            <h4 class="title">Edit Your Profile</h4>
+        </div>
+        <div class="content">
+
+            <form action="." method="post" enctype="multipart/form-data">
+{% csrf_token %}
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="lablenobold">First Name</label>
+                            {{form.first_name}}
+                        </div>
+                    </div>
+                     <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="lablenobold">Last Name</label>
+                            {{form.last_name}}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="lablenobold">Email Address</label>
+                            {{form.email}}
+                        </div>
+                    </div>
+
+                </div>
+
+                 <div class="row">
+                   <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="lablenobold">User Name</label>
+                            {{form.username}}
+                        </div>
+                    </div>
+                     <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="lablenobold">Password</label>
+                            <div class="input-group margin-bottom-20">
+                                            <input type="password" readonly="readonly" value="xxxxxx" class="form-control">
+                                            <a class="input-group-addon" id="btnChangePass" href="#">Change Password</a>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                            <label class="lablenobold">Profile Snapshot</label>
+                            <!--<input type="file" name="profilepic"
+                                   class="form-control" required="required" placeholder="Portfolio Snapshot">-->
+                            {{proform.profilepic}}
+                        </div>
+                    </div>
+                </div>
+
+                 <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="lablenobold">Address</label>
+                            {{proform.address}}
+                        </div>
+                    </div>
+                     <div class="col-md-4" style="padding-right: 0px;">
+                        <div class="form-group" style="width: 50px;float: left;">
+                            <label class="lablenobold">Ext</label>
+                            {{proform.ext}}
+                        </div>
+
+                             <div class="form-group" style="    width: 76%;    float: left;    margin-left: 11px;">
+                                <label class="lablenobold">Phone#</label>
+                                {{proform.phoneno}}
+                            </div>
+
+                    </div>
+                   <div class="col-md-4" >
+                         <div class="form-group">
+                            <label class="lablenobold">Mobile#</label>
+                            {{proform.mobileno}}
+                        </div>
+                    </div>
+
+                </div>
+
+                 <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="lablenobold">Skills - (e.g Asp.net, C#, HTML)</label>
+                            {{proform.skills}}
+                        </div>
+                    </div>
+                     <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="lablenobold">Who are you?</label>
+                            {{proform.position}}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="lablenobold">About Me</label>
+                            <!--<textarea cols="40" class="form-control"  rows="6" name="aboutme"></textarea>-->
+                            {{proform.aboutme}}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-8">
+
+                    </div>
+                    <div class="col-lg-4 text-right">
+                        <a class="btn btn-primary" href="/account/profile/">Cancel</a>
+                        <button class="btn btn-primary" type="submit">Update Profile</button>
+                    </div>
+                </div>
+
+            <div class="clearfix"></div>
+            </form>
+            </div>
+            </div>
+        </div>
+
+ </div>
+
+</div>
+
+<div id="changepassmodal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-md">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Change Password</h4>
+      </div>
+      <div class="modal-body">
+        <form action="/account/changepassword" id="changepasswordform" method="post" >
+            <div clsas="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="lablenobold">Old Passoword</label>
+                        <input type="password" name="oldpassword" class="form-control">
+                    </div>
+                 </div>
+            </div>
+            <div clsas="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="lablenobold">New Passoword</label>
+                        <input type="password" id="newpassword" name="newpassword" class="form-control">
+                    </div>
+                 </div>
+            </div>
+            <div clsas="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="lablenobold">Confirm Passoword</label>
+                        <input type="password" id="confirmpassword" name="confirmpassword" class="form-control">
+                        <span style="color: red" id="passmessage"></span>
+                    </div>
+                 </div>
+            </div>
+
+		<div style="clear: both;"></div>
+
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-done btn-primary btnchangepass">Change Password</button>
+      </div>
+        </form>
+         </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script type="application/javascript">
+    $(function() {
+        $('#btnChangePass').click(function () {
+            $('#changepassmodal').modal();
+        });
+
+        var password = document.getElementById("newpassword"),
+                confirm_password = document.getElementById("confirmpassword");
+
+        function validatePassword(){
+          validate = false
+          if(password.value != confirm_password.value) {
+            confirm_password.setCustomValidity("New password and Confirm password didn't match.");
+            validate = false
+          } else {
+            confirm_password.setCustomValidity('');
+            validate = true
+          }
+          return validate
+        }
+        password.onchange = validatePassword;
+        confirm_password.onkeyup = validatePassword;
+
+    });
+ </script>
+{% endblock %}

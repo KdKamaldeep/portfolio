@@ -1,0 +1,295 @@
+{% extends 'base/legendmaster.html' %}
+{%load get_profile_extra%}
+{% load urls %}
+{%block searchcontent%}
+<div class="searchbar">
+   <form method="get" action="/team/">
+             <div class="form-group divinput">
+                <input type="text" value="{{teamname}}" placeholder="Team Name" name="teamname"
+                       style="width:400px"
+                       class="form-control onfocusofinput">
+            </div>
+                <div class="cleafix"></div>
+                <div style="float: right;
+            margin-top: -15px;" class="form-group">
+                <button class="btn btn-primary" type="submit" style="border-radius: 0px;">Search</button>
+            </div>
+        <div class="cleafix"></div>
+     </form>
+</div>
+{%endblock%}
+{% block content %}
+
+
+<div class="row" style="margin-top:10px"></div>
+<div class="container ">
+
+            <div class="row" >
+
+              <div class="wrapper-content animated fadeInRight">
+
+                  {% if teams|length <= 0 %}
+               <div class="cards">
+                  <div class="header">
+                     <h4 class="title">Nothing Found!</h4>
+                  </div>
+                  <div class="content">
+                     We did not found any team that match your search criteria.
+                  </div>
+               </div>
+            {% endif %}
+
+                  {% if teams|length > 0 %}
+              <div class="header" style="margin-top:-35px !important;padding-left: 20px;">
+                   {% if sts == "no" %}
+                   <span style="color:red;marigin-left:10px !important">*</span> Only accepted team member's are visible publicly.
+                   {%endif%}
+
+                <h4 class="title">Showing {{ teams.number }} of {{ teams.paginator.num_pages }}</h4>
+              </div>
+            {% endif %}
+
+                   {%for team in teams%}
+                    {% count_team_member team.id as teammember %}
+                    {% if teammember.teammembers|length > 0 %}
+                        <div class="col-lg-4">
+
+                        <div class="ibox borderwithouttop">
+
+                        <div class="ibox-title">
+                            {%if sts == 'no'%}
+                                <h5 title="{{team.teamname | title}}" data-toggle="tooltip">
+                                    {% if team.status == "ACTIVE" %}
+                                        <span>{{team.teamname | title | truncatechars:20 }} ({{team.status}})</span>
+                                    {%else%}
+                                        <span style="color: #9e9e9e;">{{team.teamname | title | truncatechars:20 }} ({{team.status}})</span>
+                                    {%endif%}
+                                </h5>
+                                <a style="float:right" data-href="/team/delete/{{team.id}}"
+                                   title="Delete Team" data-toggle="tooltip" class="fa fa-times deleteteam"></a>
+
+                                <!--<a style="float:right" href="/team/edit/{{team.hostedteamid}}"
+                                   title="Edit Team" data-toggle="tooltip" class="fa fa-pencil-square-o"></a> -->
+
+
+                            {%else%}
+                                <h5 title="{{team.teamname | title}}" data-toggle="tooltip">
+                                    {{team.teamname | title | truncatechars:20 }}
+                                </h5>
+
+                                <a class="btn btn-xs btn-default" style="float:right"
+                                   href="/team/leaveteam/{{team.id}}/{{request.user.id}}"> Leave Team</a>
+
+                            {%endif%}
+
+                        </div>
+                        <div class="ibox-content">
+                            <div class="team-members">
+                                {% for teammeb in teammember.teammembers %}
+                                    {% get_profile teammeb.inviteduser_id as userprofile %}
+
+                                            {% if teammeb.status == "PENDING"%}
+                                                <a href="#"><img alt="member" class="img-circle"
+                                                             style="opacity:0.5;border-radius:20px;border:3px solid #ffb3b3;"
+                                                             title="{{userprofile.user.first_name | title}} (Pending)"
+                                                             data-toggle="tooltip"
+                                                             src="{%user_profile_pic_by_id teammeb.inviteduser_id%}"></a>
+                                            {%else%}
+                                                <a href="#"><img alt="member" class="img-circle"
+                                                             style="border-radius:20px;border:3px solid #b3ffcc;"
+                                                             title="{{userprofile.user.first_name | title}} (Accepted)"
+                                                             data-toggle="tooltip"
+                                                             src="{%user_profile_pic_by_id teammeb.inviteduser_id%}"></a>
+
+
+                                            {%endif%}
+
+
+                                {%endfor%}
+                                {% if teammember.showmore == True %}
+
+                                     <a href="/team/view/{{team.hostedteamid}}/{{sts}}">
+
+                                         <!--<img alt="" class="img-circle"
+                                                     style="border-radius:20px;border:3px solid #FFFFFF;"
+                                                     src="/media/profile/moremember.png">-->
+
+                                         <img src=""  alt="{{teammember.leftmember}}+"
+                                         style="width:8px;height:8px;position:absolute;z-index:3;
+                                         margin-left:5px;margin-top:20px;font-size:15px;font-weight:bold">
+                                     </a>
+
+                                {% endif %}
+                            </div>
+
+                            {% if team.status == "ACTIVE" %}
+                                <h5> Info About {{team.teamname | title}}</h5>
+                            {%else%}
+                                <h5  style="color: #9e9e9e;">Info About {{team.teamname | title}}</h5>
+                            {%endif%}
+
+                            <p>
+                               {{teamlst.team.aboutteam | truncatechars:50 }}
+                            </p>
+
+                            <!-- <div>
+                                <span>Status of current project:</span>
+                                <div class="stat-percent">48%</div>
+                                <div class="progress progress-mini">
+                                    <div style="width: 48%;" class="progress-bar"></div>
+                                </div>
+                            </div>-->
+                            <hr style="border:0;border-top:1px solid lightgray;margin:0;height:1px;" />
+
+                            <div class="row  m-t-sm">
+                                <div class="col-sm-6">
+                                    <div class="font-bold">
+                                        {% if team.status == "ACTIVE" %}
+                                            <span>PROJECTS</span>
+                                        {%else%}
+                                            <span style="color: #9e9e9e;">PROJECTS</span>
+                                        {%endif%}
+                                    </div>
+                                {% count_accepted_members_projects team.id as totalprojects %}
+                                    {{totalprojects}}
+                                </div>
+                                <div class="col-sm-6 text-right">
+                                    <div class="font-bold">
+                                        {% if team.status == "ACTIVE" %}
+                                            <span>PORTFOLIOS</span>
+                                        {%else%}
+                                            <span style="color: #9e9e9e;">PORTFOLIOS</span>
+                                        {%endif%}
+                                        </div>
+                                    {% count_accepted_members_portfolio team.id %}
+                                </div>
+                            </div>
+                            <div class="row  m-t-sm">
+                                <div class="col-sm-6">
+                                    <div class="font-bold">
+                                        <a href="/team/view/{{team.hostedteamid}}/{{sts}}">
+                                            <span class="label btn btn-primary pull-left"
+                                                  style="background-color:#34495e;border-color:#34495e;color:#ffffff">
+
+                                        {% if team.status == "ACTIVE" %}
+                                            <span>VIEW DETAILS</span>
+                                        {%else%}
+                                            <span style="color: #9e9e9e;">VIEW DETAILS</span>
+                                        {%endif%}
+
+                                          </span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                {% if sts == "no"%}
+                                <div class="col-sm-6">
+                                    <div class="font-bold">
+                                        <a href="javascript:void(0)">
+                                            <span class="label btn btn-primary pull-right"
+                                                  style="background-color:#34495e;border-color:#34495e;color:#ffffff;margin-left:15px">
+                                                {% if team.status == 'ACTIVE'%}
+                                                    <span class="teamstatus" teamid="{{team.id}}" status="INACTIVE"> MARK INACTIVE</span>
+                                                {%else%}
+                                                    <span class="teamstatus" teamid="{{team.id}}" status="ACTIVE" style="color: #9e9e9e;"> MARK ACTIVE</span>
+                                                {%endif%}
+                                            </span>
+                                        </a>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+
+                            </div>
+
+                            {% if sts == "no"%}
+                             <div class="row  m-t-sm">
+                                <div class="col-sm-12">
+                                    <a href="/public/team/{{team.hostedteamid}}">
+                                        http://{{request.get_host}}/public/team/{{team.hostedteamid}}</a>
+
+                                </div>
+                            </div>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                    </div>
+                    {%endif%}
+                  {%endfor%}
+              </div>
+
+
+            </div>
+
+            <div style="display: none;" id="profilecontent"></div>
+                {% if teams|length > 0%}
+                    <ul class="pagination" style="float: left;margin-left: 10px;">
+                        {% if teams.has_previous %}
+                            <li><a href="{% add_params request.get_full_path page=projects.previous_page_number %}">Prev</a></li>
+                        {%else%}
+                            <li><span class="currentpage">Prev</span></li>
+                        {% endif %}
+                        {% for page in teams.paginator.page_range %}
+                            {% ifequal page teams.number %}
+                                <li><span class="currentpage">{{page}}</span></li>
+                                {% else %}
+                                <li><a href="{% add_params request.get_full_path page=page %}">{{page}}</a></li>
+                            {% endifequal  %}
+                        {% endfor %}
+                        {% if teams.has_next %}
+                            <li><a href="{% add_params request.get_full_path page=projects.next_page_number %}">Next</a></li>
+                        {%else%}
+                            <li><span class="currentpage">Next</span></li>
+                        {% endif %}
+                    </ul>
+                {%endif%}
+
+
+
+{% if sts == "no"%}
+    <a title="Create Team" href="/team/new/" data-toggle="tooltip" class="btn btn-success rightfloatbutton">+</a>
+{%endif%}
+
+</div>
+{%endblock%}
+
+
+{%block script%}
+<script type="text/javascript">
+ $(document).ready(function() {
+ $('.teamstatus').bind('click', function(){
+        var status = $(this).attr('status')
+        var teamid = $(this).attr('teamid')
+        $.get('/team/changeteamstatus/'+teamid+'/'+status, function(response){
+                window.location = '/team/';
+            })
+        });
+
+
+
+  $('.deleteteam').click(function () {
+   var url = $(this).attr('data-href')
+
+    swal({
+        title: "Are you sure to delete?",
+        text: "You will not be able to recover this team again!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, delete it!",
+        closeOnConfirm: false
+
+    }, function () {
+        $.get(url, function(response){
+           swal("Deleted!", "Your selected team has been deleted.", "success");
+            window.location="/team/";
+            })
+             });
+             })
+
+
+
+});
+</script>
+{%endblock%}

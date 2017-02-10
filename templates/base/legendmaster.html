@@ -1,0 +1,510 @@
+{%load get_profile_extra%}
+{% load notifications_tags %}
+{% load humanize %}
+<!-- === BEGIN HEADER === -->
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+    <!--<![endif]-->
+    <head>
+        <!-- Title -->
+        <title>Online Portfolio</title>
+        <!-- Meta -->
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <!-- Favicon -->
+        <link href="favicon.ico" rel="shortcut icon">
+        <!-- Bootstrap Core CSS -->
+        <link rel="stylesheet" href="/static/design/assets/css/bootstrap.css" rel="stylesheet">
+        <!-- Template CSS -->
+        <link rel="stylesheet" href="/static/design/assets/css/animate.css" rel="stylesheet">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+        <link rel="stylesheet" href="/static/design/assets/css/nexus.css?v=1" rel="stylesheet">
+        <link rel="stylesheet" href="/static/design/assets/css/responsive.css" rel="stylesheet">
+
+        <!-- Google Fonts-->
+        <link href="http://fonts.googleapis.com/css?family=Roboto:400,300" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="/static/design/datepicker/css/bootstrap-datepicker.css">
+        <link rel="stylesheet" href="/static/design/assets/taginputs/bootstrap-tagsinput.css">
+        <link rel="stylesheet" href="/static/design/assets/css/style.css">
+        <link href="/static/design/assets/css/styles.css" rel="stylesheet"/>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/4.0.1/ekko-lightbox.min.css" rel="stylesheet"/>
+        <link href="/static/design/assets/jcrousel/style.css" rel="stylesheet"/>
+        <link href="/static/design/assets/jcrousel/jcarousel.basic.css" rel="stylesheet"/>
+        <link href="/static/design/assets/growl/jquery.growl.css" rel="stylesheet"/>
+        <link href="/static/design/assets/css/contact.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/jquery.webui-popover/1.2.1/jquery.webui-popover.min.css"/>
+        <link href="/static/new-design/assets/css/style.css" rel="stylesheet">
+        <link href="/static/design/assets/sweetalert/sweetalert.css" rel="stylesheet">
+    </head>
+    <body><!-- === BEGIN HEADER === -->
+<body>
+        <div id="body_bg">
+            <div id="pre_header" class="container">
+                <div class="row margin-top-10 visible-lg">
+                    <div class="col-md-6">
+                        <p>
+                            <strong>Phone:</strong>&nbsp;+91 172 4029651</p>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <p>
+                            <strong>Email:</strong>
+                            <a href="mailto:onlineportfolio@ameotech.com">onlineportfolio@ameotech.com</a>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="primary-container-group">
+                <!-- Background -->
+                <div class="primary-container-background">
+                    <div class="primary-container"></div>
+                    <div class="clearfix"></div>
+                </div>
+                <!--End Background -->
+                <div class="primary-container">
+                    <div id="header" class="container">
+                        <div class="row">
+                            <!-- Logo -->
+                            <div class="logo">
+                                <a href="/" title="" style="top: 0px !important;">
+                                    <!--<img src="/static/design/assets/img/logo.png" alt="Logo" />-->
+                                    <img src="/static/assets/images/cloud_logo.png" style="width: 25%" alt="Logo" />
+                                </a>
+                            </div>
+                            <!-- End Logo -->
+                            <ul class="social-icons pull-right hidden-xs">
+                                <li class="social-rss">
+                                    <a href="#" target="_blank" title="RSS"></a>
+                                </li>
+                                <li class="social-twitter">
+                                    <a href="" target="_blank" title="Twitter"></a>
+                                </li>
+                                <li class="social-facebook">
+                                    <a href="https://www.facebook.com/theameotech" target="_blank" title="Facebook"></a>
+                                </li>
+                                <li class="social-googleplus">
+                                    <a href="#" target="_blank" title="GooglePlus"></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Top Menu -->
+                    <div id="hornav" class="container no-padding">
+                        <div class="row">
+                            <div class="col-md-12 no-padding">
+                                <div class="pull-left visible-lg">
+                                    <ul id="" class="nav navbar-nav">
+                                        <li>
+                                            <a href="/" class="fa-home">Online Portfolio</a>
+                                        </li>
+                                     </ul>
+                                </div>
+                                <div class="pull-right visible-lg">
+                                    <ul id="hornavmenu" class="nav navbar-nav no-padding">
+                                        <li>
+                                            <a href="/public/searchportfolios"><span class="fa-briefcase">Search Portfolios</span></a>
+                                        </li>
+                                        <li>
+                                            <a href="/public/searchprojects"><span class="fa-building-o">Search Projects</span></a>
+                                        </li>
+                                        <li>
+                                            <a href="/public/searchteams"><span class="fa-user-plus">Search Teams</span></a>
+                                        </li>
+                                        <li>
+                                            <a href="/public/searchcontacts"><span class="fa-users">Search Contacts</span></a>
+                                        </li>
+
+                                        {% if request.user.is_authenticated %}
+
+                                            <li class="dropdown">
+                                                <a href="#" class="dropdownmenu"><span class="fa-user">
+                                                {{request.user.username}}</span>
+                                                <span class="caret"></span></a>
+                                                 <ul class="dropdown-menu" role="menu">
+                                                      <li>
+                                                <a href="/account/contacts"><span class="fa-users">My Contacts</span></a>
+                                            </li>
+                                                    <li><a href="/portfolio/"><span class="fa-briefcase">My Portfolios</span></a></li>
+                                                     <li>
+                                                        <a href="/project/"><span class="fa-building-o">My Projects</span></a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/account/profile"><span class="fa-user">My Profile</span></a>
+                                                    </li>
+                                                     <li>
+                                                        <a href="/team/"><span class="fa-user">My Team</span></a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="/account/signout"> <span class="fa-sign-out">Sign Out</span></a>
+                                                    </li>
+                                                 </ul>
+                                            </li>
+                                        {%else%}
+                                            <li><a href="/account/signin"> <span class=" fa-sign-in">Sign In</span></a></li>
+                                        {% endif %}
+                                    </ul>
+                                    <!--Contact request are start -->
+                                    <div class="nav navbar-nav">
+                                        {% if request.user.is_authenticated %}
+
+                                            {% get_contact_requests request.user.id as contactrequests %}
+                                            {% get_invitation_request request.user.id as inviterequests %}
+
+                                            <div role="presentation" style="padding-top: 10px;padding-right: 10px;float: left;">
+                                                <a href="#" class="notificationlink" mark_as_read="no">
+                                                    <span class="fa fa-users">
+                                                        {% if contactrequests and  inviterequests %}
+                                                            <span class="badgenotifictioanrequest">
+                                                                {% addlength contactrequests|length inviterequests|length %}
+                                                            </span>
+                                                        {% elif contactrequests %}
+                                                            <span class="badgenotifictioanrequest">
+                                                                {{contactrequests|length}}
+                                                            </span>
+                                                        {% elif inviterequests %}
+                                                            <span class="badgenotifictioanrequest">
+                                                                {{inviterequests|length}}
+                                                            </span>
+                                                        {% endif %}
+                                                    </span>
+                                                                                                                                                                                                                    </a>
+                                                <div class="notificationcontainer" style="right: 52px;">
+
+                                                    {% if contactrequests|length <= 0  and inviterequests|length <= 0  %}
+                                                        <div class="divnotifcation">
+                                                             <a>
+                                                                <span class="message">
+                                                                    No Contact/Invitation Requests
+                                                                </span>
+                                                              </a>
+                                                        </div>
+                                                    {%endif%}
+
+
+                                                    {% for contactrequest in contactrequests %}
+                                                        <div class="divnotifcation">
+                                                             <a href="/public/viewprofile/{{contactrequest.fromuser.id}}/yes">
+
+                                                                <span class="image">
+                                                                    <img src="{% user_profile_pic_by_id  contactrequest.fromuser.id %}" alt="Profile Image">
+                                                                </span>
+
+                                                                <span>
+                                                                  <span class="">{{ contactrequest.fromuser.first_name}} {{ contactrequest.fromuser.last_name}}</span>
+                                                                  <span class="time">{{contactrequest.create_date | naturaltime}}</span>
+                                                                </span>
+                                                                <span class="message">
+                                                                 {{ contactrequest.user.first_name}} {{ contactrequest.user.last_name}}
+                                                                    send you a contact request
+                                                                </span>
+                                                              </a>
+                                                        </div>
+                                                    {% endfor %}
+
+
+                                                    {% for inviterequest in inviterequests %}
+                                                        <div class="divnotifcation">
+                                                             <a href="/team/view/{{inviterequest.team.hostedteamid}}/yes">
+
+                                                                 <span class="image">
+                                                                    <img src="{% user_profile_pic_by_id  inviterequest.team.owner_id %}" alt="Profile Image">
+                                                                </span>
+
+                                                                <span>
+                                                                  <span class="">{{ inviterequest.team.owner.first_name}} </span>
+                                                                  <span class="time">{{inviterequest.team.create_date | naturaltime}}</span>
+                                                                </span>
+                                                                <span class="">
+                                                                    {{ inviterequest.team.owner.first_name}} sends you request to join  {{ inviterequest.team.teamname}} team
+                                                                </span>
+                                                              </a>
+                                                        </div>
+                                                    {% endfor %}
+
+
+
+
+
+
+                                                </div>
+                                            </div>
+
+
+                                          <!-- {% get_invitation_request request.user.id as inviterequests %}
+                                            <div role="presentation" style="padding-top: 10px;padding-right: 10px;float: left;">
+                                                <a href="#" class="notificationlink" mark_as_read="no">
+                                                    <span class="fa fa-users">
+                                                        {% if inviterequests %}
+                                                        <span class="badgenotifictioanrequest">
+                                                            {{inviterequests|length}}
+
+                                                        </span>
+                                                         {% endif %}
+                                                    </span>
+                                                                                                                                                                                                                    </a>
+                                                <div class="notificationcontainer" style="right: 52px;">
+                                                    {% if inviterequests|length <= 0 %}
+                                                        <div class="divnotifcation">
+                                                             <a>
+                                                                <span class="message">
+                                                                    No Contact Requests
+                                                                </span>
+                                                              </a>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            -->
+                                        {% endif %}
+                                        {% notifications_unread as unread_count %}
+                                        {% if request.user.is_authenticated %}
+                                            <div role="presentation" style="padding-top: 10px;padding-right: 10px;float: left;">
+                                                <a href="#" class="notificationlink" mark_as_read="yes">
+                                                    <span class="fa-bell-o">
+                                                        {% if unread_count %}
+                                                        <span class="badgenotifictioan">
+                                                            {{unread_count}}
+                                                        </span>
+                                                         {% endif %}
+                                                    </span>
+                                                </a>
+                                                <div class="notificationcontainer">
+                                                    {% for notification in request.user.notifications.unread %}
+                                                    {% with notification|classname as modelclass %}
+
+                                                        <div class="divnotifcation">
+                                                             <a>
+                                                                <span class="image">
+                                                                    <img src="{% user_profile_pic_by_id  notification.actor.id %}" alt="Profile Image">
+                                                                </span>
+
+                                                                <span>
+                                                                  <span class="">{{ notification.actor.first_name}} {{ notification.actor.last_name}}</span>
+                                                                  <span class="time">{{notification.timestamp | naturaltime}}</span>
+                                                                </span>
+                                                                <span class="message">
+                                                                  {{notification.verb}}
+                                                                </span>
+                                                              </a>
+                                                        </div>
+
+                                                    {% endwith %}
+                                                    {% endfor %}
+
+                                                    {% for notification in request.user.notifications.read %}
+                                                    {% with notification|classname as modelclass %}
+
+                                                        <div class="divnotifcation">
+                                                             <a>
+                                                                <span class="image">
+                                                                    <img src="{% user_profile_pic_by_id  notification.actor.id %}" alt="Profile Image">
+                                                                </span>
+
+                                                                <span>
+                                                                  <span class="">{{ notification.actor.first_name}} {{ notification.actor.last_name}}</span>
+                                                                  <span class="time">{{notification.timestamp | naturaltime}}</span>
+                                                                </span>
+                                                                <span class="message">
+                                                                  {{notification.verb}}
+                                                                </span>
+                                                              </a>
+                                                        </div>
+
+                                                    {%endwith%}
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <!-- End contact request -->
+
+                                </div>
+                            </div>
+                        </div>
+
+                        {%block searchcontent%}
+                        {%endblock%}
+
+                    </div>
+                    {% autoescape off %}{%email_verified request%} {% endautoescape %}
+
+                    <!-- End Top Menu -->
+                    <!-- === END HEADER === -->
+                    <!-- === BEGIN CONTENT === -->
+                    <div id="content">
+                      {% block content %}
+                      {% endblock %}
+                    </div>
+                </div>
+            </div>
+            <!-- === END CONTENT === -->
+            <!-- === BEGIN FOOTER === -->
+            <div id="base">
+                <div class="container padding-vert-30 margin-top-40">
+                    <div class="row">
+                        <!-- Sample Menu -->
+                        <div class="col-md-3 margin-bottom-20">
+                            <h3 class="margin-bottom-10">Menu</h3>
+                            <ul class="menu">
+                                <li>
+                                    <a class="fa-briefcase" href="/public/searchportfolios">Search Portfolios</a>
+                                </li>
+                                <li>
+                                    <a class="fa-building-o"  href="/public/searchprojects">Search Projects</a>
+                                </li>
+                                <li>
+                                    <a class="fa-user-plus" href="/public/searchteams">Search Teams</a>
+                                </li>
+                                <li>
+                                    <a class="fa-users" href="/public/searchcontacts">Search Contacts</a>
+                                </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                        <!-- End Sample Menu -->
+                        <!-- Contact Details -->
+                        <div class="col-md-3 margin-bottom-20">
+                            <h3 class="margin-bottom-10">Contact Details</h3>
+                            <p>
+                                <span class="fa-phone">Telephone:</span>+91 172 4029651
+                                <br>
+                                <span class="fa-envelope">Email:</span>
+                                <a href="mailto:onlineportfolio@ameotech.com">op@ameotech.com</a>
+                                <br>
+                                <span class="fa-link">Website:</span>
+                                <a href="http://www.ameotech.com">www.ameotech.com</a>
+                            </p>
+                            <p>Ameotech Informatics
+                                <br>F-48,  Phase 7
+                                <br>Mohali, India</p>
+                        </div>
+                        <!-- End Contact Details -->
+                        <!-- Thumbs Gallery -->
+                        <div class="col-md-3 margin-bottom-20">
+                            <h3 class="margin-bottom-10">Portfolio Highlights</h3>
+                            <div class="thumbs-gallery">
+                                <a class="thumbBox" rel="lightbox-thumbs" href="/static/design/assets/img/thumbsgallery/image01.jpg">
+                                    <img src="/static/design/assets/img/thumbsgallery/thumbs/image01.jpg" alt="image1.jpg">
+                                    <i></i>
+                                </a>
+                                <a class="thumbBox" rel="lightbox-thumbs" href="/static/design/assets/img/thumbsgallery/image02.jpg">
+                                    <img src="/static/design/assets/img/thumbsgallery/thumbs/image02.jpg" alt="image2.jpg">
+                                    <i></i>
+                                </a>
+                                <a class="thumbBox" rel="lightbox-thumbs" href="/static/design/assets/img/thumbsgallery/image03.jpg">
+                                    <img src="/static/design/assets/img/thumbsgallery/thumbs/image03.jpg" alt="image3.jpg">
+                                    <i></i>
+                                </a>
+                                <a class="thumbBox" rel="lightbox-thumbs" href="/static/design/assets/img/thumbsgallery/image04.jpg">
+                                    <img src="/static/design/assets/img/thumbsgallery/thumbs/image04.jpg" alt="image4.jpg">
+                                    <i></i>
+                                </a>
+                                <a class="thumbBox" rel="lightbox-thumbs" href="/static/design/assets/img/thumbsgallery/image04.jpg">
+                                    <img src="/static/design/assets/img/thumbsgallery/thumbs/image05.jpg" alt="image5.jpg">
+                                    <i></i>
+                                </a>
+                                <a class="thumbBox" rel="lightbox-thumbs" href="/static/design/assets/img/thumbsgallery/image06.jpg">
+                                    <img src="/static/design/assets/img/thumbsgallery/thumbs/image06.jpg" alt="image6.jpg">
+                                    <i></i>
+                                </a>
+                                <a class="thumbBox" rel="lightbox-thumbs" href="/static/design/assets/img/thumbsgallery/image07.jpg">
+                                    <img src="/static/design/assets/img/thumbsgallery/thumbs/image07.jpg" alt="image7.jpg">
+                                    <i></i>
+                                </a>
+                                <a class="thumbBox" rel="lightbox-thumbs" href="/static/design/assets/img/thumbsgallery/image08.jpg">
+                                    <img src="/static/design/assets/img/thumbsgallery/thumbs/image08.jpg" alt="image8.jpg">
+                                    <i></i>
+                                </a>
+                                <a class="thumbBox" rel="lightbox-thumbs" href="/static/design/assets/img/thumbsgallery/image09.jpg">
+                                    <img src="/static/design/assets/img/thumbsgallery/thumbs/image09.jpg" alt="image9.jpg">
+                                    <i></i>
+                                </a>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <!-- End Thumbs Gallery -->
+                        <!-- Disclaimer -->
+                        <div class="col-md-3 margin-bottom-20">
+                            <h3 class="margin-bottom-10">Disclaimer</h3>
+                            <p>
+                                In compiling the information contained on, and accessed through,
+                                this website ("Information") Ameotech Informatics has used its
+                                best endeavors to ensure that the Information is correct and current
+                                at the time of publication but takes no responsibility for any error,
+                                omission or defect therein.
+                            </p>
+                            <div class="clearfix"></div>
+                        </div>
+                        <!-- End Disclaimer -->
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer Menu -->
+            <div id="footer">
+                <div class="container">
+                    <div class="row">
+                        <div id="copyright" class="col-md-4">
+                            <p>Copyright © 2016 Ameotech Informatics</p>
+                        </div>
+                        <div id="footermenu" class="col-md-8">
+                            <ul class="list-unstyled list-inline pull-right">
+                                <li>
+                                    <a href="/public/searchportfolios">Search Portfolios</a>
+                                </li>
+                                <li>
+                                    <a href="/public/searchprojects">Search Projects</a>
+                                </li>
+                                <li>
+                                    <a href="/public/searchteams">Search Teams</a>
+                                </li>
+                                <li>
+                                    <a href="/public/searchcontacts">Search Contacts</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Footer Menu -->
+            <!-- JS -->
+            <script type="text/javascript" src="/static/design/assets/js/jquery.min.js" type="text/javascript"></script>
+            <script type="text/javascript" src="/static/design/assets/js/bootstrap.min.js" type="text/javascript"></script>
+            <!--<script type="text/javascript" src="/static/design/assets/js/scripts.js"></script>-->
+            <!-- Isotope - Portfolio Sorting -->
+            <script type="text/javascript" src="/static/design/assets/js/jquery.isotope.js" type="text/javascript"></script>
+            <!-- Mobile Menu - Slicknav -->
+            <script type="text/javascript" src="/static/design/assets/js/jquery.slicknav.js" type="text/javascript"></script>
+            <!-- Animate on Scroll-->
+            <script type="text/javascript" src="/static/design/assets/js/jquery.visible.js" charset="utf-8"></script>
+            <!-- Sticky Div
+            <script type="text/javascript" src="/static/design/assets/js/jquery.sticky.js" charset="utf-8"></script>
+            -->
+            <!-- Slimbox2-->
+            <script type="text/javascript" src="/static/design/assets/js/slimbox2.js" charset="utf-8"></script>
+            <!-- Modernizr -->
+            <script src="/static/design/assets/js/modernizr.custom.js" type="text/javascript"></script>
+
+            <script src="/static/design/datepicker/js/bootstrap-datepicker.js"></script>
+            <script src="//cdn.ckeditor.com/4.5.10/standard/ckeditor.js"></script>
+            <script src="/static/design/assets/taginputs/bootstrap-tagsinput.js"></script>
+           <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/4.0.1/ekko-lightbox.min.js"></script>
+            <script src="/static/design/assets/jcrousel/jquery.jcarousel.min.js"></script>
+            <script src="/static/design/assets/js/jssor.slider-21.1.5.min.js"></script>
+            <script src="/static/design/assets/growl/jquery.growl.js"></script>
+            <script src="/static/design/assets/js/jquery.webui-popover.js"></script>
+            <script src="/static/design/assets/sweetalert/sweetalert.min.js"></script>
+           <script src="/static/design/assets/js/onlineportfolio.js" type="text/javascript"></script>
+{% block script%}
+{% endblock %}
+</body>
+</html>

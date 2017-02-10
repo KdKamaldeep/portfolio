@@ -1,0 +1,627 @@
+{% extends 'base/legendmaster.html' %}
+{%load get_profile_extra%}
+{% load urls %}
+{% block content %}
+
+
+    <div id="content">
+        <div class="container">
+
+        <div class="wrapper-content animated fadeInRight">
+
+            <div class="row" style="margin-top:10px"></div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    {%if sts == 'no'%}
+                    <div class="col-md-6">
+                        <div><span style="color:red;marigin-left:10px !important">*</span>
+                            Only accepted team member's are visible publicly.</div>
+                    </div>
+                    <div class="col-md-6">
+                     <a href="/team/edit/{{team.hostedteamid}}" style="text-align: right;float: right;margin-right: 10px;"
+                                           class="btn btn-xs btn-default"
+                                           >Edit Team</a>
+                     </div>
+
+                    {%endif%}
+                    {% if sts == 'yes'%}
+                         <!-- {% already_team_member inviteduser_id team.id  as already_team_member %}
+                             {% if already_team_member == True %}
+                                      <a href="Javascript://" style="text-align: right;float: right;margin-right: 10px;"
+                                            disabled="disabled"
+                                            class="acceptrejectbutton btn btn-xs btn-default">
+                                             <i class="fa fa-check"></i>Invitation Accepted</a>
+                             {%else%} -->
+                                   <a href="Javascript://" style="text-align: right;float: right;margin-right: 10px;"
+                                           class="acceptrejectbutton btn btn-xs btn-default"
+                                           teamid="{{team.id}}"
+                                           inviteduser_id="{{inviteduser_id}}" requestaction="accept">Accept Invitation</a>
+
+                                   <a href="Javascript://" style="text-align: right;float: right;margin-right: 5px;"
+                                           class="acceptrejectbutton btn btn-xs btn-default" id="rejectbutton"
+                                           teamid="{{team.id}}"
+                                           inviteduser_id="{{inviteduser_id}}" requestaction="reject">Reject Invitation</a>
+
+                            <!-- {% endif %} -->
+
+                    {% endif %}
+
+                </div>
+            </div>
+
+            <div class="row m-b-lg m-t-lg" >
+
+                <div class="col-md-10" style="text-align: justify;">
+
+                    <div class="profile-image">
+                        {% if request.user.id == team.owner_id %}
+
+                            <a href="/account/profile">
+                                <img src="{%user_profile_pic_by_id team.owner_id%}"
+                                     class="img-circle circle-border m-b-md" alt="profile">
+                            </a>
+
+                        {% else %}
+
+                            <a href="/public/viewprofile/{{team.owner_id}}/yes">
+                                <img src="{%user_profile_pic_by_id team.owner_id%}"
+                                     class="img-circle circle-border m-b-md" alt="profile"></a>
+
+                        {% endif %}
+
+                    </div>
+                    <div class="profile-info">
+                        <div class="">
+                            <div>
+                                <h2 class="no-margins">
+                                    {{team.owner.first_name | title}} {{team.owner.last_name | title}}  (Owner)
+                                </h2>
+                                <h4>Founder of {{team.teamname | title}}</h4>
+                                <small>
+                                    {{team.aboutteam}}
+
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--
+                <div class="col-md-4">
+                    {% if sts == 'yes'%}
+
+                         {% already_team_member inviteduser_id team.id  as already_team_member %}
+                             {% if already_team_member == True %}
+                                      <a href="Javascript://" style="text-align: right;float: right;margin-right: 10px;"
+                                            disabled="disabled"
+                                            class="acceptrejectbutton btn btn-xs btn-default">
+                                             <i class="fa fa-check"></i>Invitation Accepted</a>
+                             {%else%}
+
+                                   <a href="Javascript://" style="text-align: right;float: right;margin-right: 10px;"
+                                           class="acceptrejectbutton btn btn-xs btn-default"
+                                           teamid="{{team.id}}"
+                                           inviteduser_id="{{inviteduser_id}}" requestaction="accept">Accept Invitation</a>
+
+                                   <a href="Javascript://" style="text-align: right;float: right;margin-right: 5px;"
+                                           class="acceptrejectbutton btn btn-xs btn-default" id="rejectbutton"
+                                           teamid="{{team.id}}"
+                                           inviteduser_id="{{inviteduser_id}}" requestaction="reject">Reject Invitation</a>
+
+                            {% endif %}
+
+                    {% endif %}
+
+                </div>
+                -->
+
+                 <!--
+                <div class="col-md-3">
+                    <small>Sales in last 24h</small>
+                    <h2 class="no-margins">206 480</h2>
+                    <div id="sparkline1"></div>
+                </div>
+                -->
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-lg-12">
+
+                    <div class="ibox">
+                        <div class="ibox-content">
+                                <h3>About  {{team.owner.first_name | title}} {{team.owner.last_name | title}}</h3>
+
+                            <p class="small">
+
+                                {% get_profile team.owner_id as ownerprofile %}
+                                {{ ownerprofile.aboutme | safe }}
+
+                                <!--
+                                There are many variations of passages of Lorem Ipsum available, but the majority have
+                                suffered alteration in some form, by injected humour, or randomised words which don't.
+
+                                <br/>
+                                <br/>
+                                If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't
+                                anything embarrassing
+                            </p>
+
+                            <p class="small font-bold">
+                                <span><i class="fa fa-circle text-navy"></i> Online status</span>
+                                </p>
+                                -->
+                        </div>
+                    </div>
+
+
+                     <div class="ibox">
+                        <div class="ibox-content">
+                            <h3>Team Members</h3>
+                            <p class="small">
+                                List of team member
+                            </p>
+                            <div class="user-friends">
+
+                                {% count_team_member team.id as teammember %}
+                                {% for teammeb in teammember.allmembers %}
+                                    {% get_profile teammeb.inviteduser_id as userprofile %}
+
+                                    {% if teammeb.status == "PENDING"%}
+
+                                         <a href="/public/viewprofile/{{teammeb.inviteduser_id}}/yes"><img alt="member" class="img-circle"
+                                                          title="{{userprofile.user.first_name | title}} (Pending)"
+                                                          data-toggle="tooltip"
+                                                          style="opacity:0.5;border-radius:20px;border:3px solid #ffb3b3;position: relative;z-index: 1;"
+                                                          src="{%user_profile_pic_by_id teammeb.inviteduser_id%}">
+
+                                             <!--<img src="/static/design/assets/img/remove.png" style="width:8px;height:8px;position:absolute;z-index: 3;
+                                             margin-left: -47px;margin-top: 31px;"> -->
+                                         </a>
+
+                                      <!--  <a href="#"><img alt="member"
+                                                         data-poload="/public/viewprofile/{{teammeb.inviteduser_id}}/no"
+                                                         data-url="/public/viewprofile/{{teammeb.inviteduser_id}}/no"
+                                                         class="contactlogo viewprofile"
+                                                         position="{%popover_position forloop.counter%}"
+                                                         profile-url="/public/viewprofile/{{teammeb.inviteduser_id}}?v=1"
+                                                         class="img-circle"
+                                                         style="opacity:0.5;border-radius:20px;border:1px solid #ffb3b3;"
+                                                         tooltip="PENDING"
+                                                         src="{%user_profile_pic_by_id teammeb.inviteduser_id%}"></a>  -->
+
+                                    {%else%}
+
+                                        <a href="/public/viewprofile/{{teammeb.inviteduser_id}}/yes"><img alt="member" class="img-circle"
+                                                         title="{{userprofile.user.first_name | title}} (Accepted)"
+                                                          data-toggle="tooltip"
+                                                         style="border-radius:20px;border:3px solid #b3ffcc;position: relative;z-index: 1;"
+                                                        src="{%user_profile_pic_by_id teammeb.inviteduser_id%}">
+
+                                            <!-- <img src="/static/design/assets/img/tick-icon.png" style="width:10px;height:10px;position:absolute;z-index: 3;
+                                                        margin-left: -47px;margin-top: 31px;"> -->
+                                                    </a>
+
+                                       <!-- <a href="#"><img alt="member"
+                                                         data-poload="/public/viewprofile/{{teammeb.inviteduser_id}}/no"
+                                                         data-url="/public/viewprofile/{{teammeb.inviteduser_id}}/no"
+                                                         class="contactlogo viewprofile" position="{%popover_position forloop.counter%}"
+                                                         profile-url="/public/viewprofile/{{teammeb.inviteduser_id}}?v=1"
+                                                         class="img-circle"
+                                                         style="border-radius:20px;border:1px solid #b3ffcc;"
+                                                         src="{%user_profile_pic_by_id teammeb.inviteduser_id%}"></a> -->
+
+
+                                    {%endif%}
+                                {%endfor%}
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!--
+                    <div class="ibox">
+                        <div class="ibox-content">
+                            <h3>Followers and friends</h3>
+                            <p class="small">
+                                If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't
+                                anything embarrassing
+                            </p>
+                            <div class="user-friends">
+                                <a href=""><img alt="image" class="img-circle" src="/static/new-design/assets/img/a3.jpg"></a>
+                                <a href=""><img alt="image" class="img-circle" src="/static/new-design/assets/img/a1.jpg"></a>
+                                <a href=""><img alt="image" class="img-circle" src="/static/new-design/assets/img/a2.jpg"></a>
+                                <a href=""><img alt="image" class="img-circle" src="/static/new-design/assets/img/a4.jpg"></a>
+                                <a href=""><img alt="image" class="img-circle" src="/static/new-design/assets/img/a5.jpg"></a>
+                                <a href=""><img alt="image" class="img-circle" src="/static/new-design/assets/img/a6.jpg"></a>
+                                <a href=""><img alt="image" class="img-circle" src="/static/new-design/assets/img/a7.jpg"></a>
+                                <a href=""><img alt="image" class="img-circle" src="/static/new-design/assets/img/a8.jpg"></a>
+                                <a href=""><img alt="image" class="img-circle" src="/static/new-design/assets/img/a2.jpg"></a>
+                                <a href=""><img alt="image" class="img-circle" src="/static/new-design/assets/img/a1.jpg"></a>
+                            </div>
+                        </div>
+                    </div>
+                    -->
+
+
+
+                   <!--
+                    <div class="ibox">
+                        <div class="ibox-content">
+                            <h3>Personal friends</h3>
+                            <ul class="list-unstyled file-list">
+                                <li><a href=""><i class="fa fa-file"></i> Project_document.docx</a></li>
+                                <li><a href=""><i class="fa fa-file-picture-o"></i> Logo_zender_company.jpg</a></li>
+                                <li><a href=""><i class="fa fa-stack-exchange"></i> Email_from_Alex.mln</a></li>
+                                <li><a href=""><i class="fa fa-file"></i> Contract_20_11_2014.docx</a></li>
+                                <li><a href=""><i class="fa fa-file-powerpoint-o"></i> Presentation.pptx</a></li>
+                                <li><a href=""><i class="fa fa-file"></i> 10_08_2015.docx</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    -->
+                    {% if sts == 'no'%}
+                    <div class="ibox">
+                        <div class="ibox-content">
+                            <h3>Private message</h3>
+
+                            <p class="small">
+                                Send private message to {{team.owner.first_name | title}} {{team.owner.last_name | title}}
+                            </p>
+
+                            <div class="form-group">
+                                <label>Subject</label>
+                                <input type="email" class="form-control" placeholder="Message subject">
+                            </div>
+                            <div class="form-group">
+                                <label>Message</label>
+                                <textarea class="form-control" placeholder="Your message" rows="3"></textarea>
+                            </div>
+                            <button class="btn btn-primary btn-block">Send</button>
+
+                        </div>
+                    </div>
+                    {%endif%}
+
+                </div>
+
+             <!--   <div class="col-lg-5">
+
+                    <div class="social-feed-box">
+
+                        <div class="pull-right social-action dropdown">
+                            <button data-toggle="dropdown" class="dropdown-toggle btn-white">
+                                <i class="fa fa-angle-down"></i>
+                            </button>
+                            <ul class="dropdown-menu m-t-xs">
+                                <li><a href="#">Config</a></li>
+                            </ul>
+                        </div>
+                        <div class="social-avatar">
+                            <a href="" class="pull-left">
+                                <img alt="image" src="img/a1.jpg">
+                            </a>
+                            <div class="media-body">
+                                <a href="#">
+                                    Andrew Williams
+                                </a>
+                                <small class="text-muted">Today 4:21 pm - 12.06.2014</small>
+                            </div>
+                        </div>
+                        <div class="social-body">
+                            <p>
+                                Many desktop publishing packages and web page editors now use Lorem Ipsum as their
+                                default model text, and a search for 'lorem ipsum' will uncover many web sites still
+                                in their infancy. Packages and web page editors now use Lorem Ipsum as their
+                                default model text.
+                            </p>
+
+                            <div class="btn-group">
+                                <button class="btn btn-white btn-xs"><i class="fa fa-thumbs-up"></i> Like this!</button>
+                                <button class="btn btn-white btn-xs"><i class="fa fa-comments"></i> Comment</button>
+                                <button class="btn btn-white btn-xs"><i class="fa fa-share"></i> Share</button>
+                            </div>
+                        </div>
+                        <div class="social-footer">
+                            <div class="social-comment">
+                                <a href="" class="pull-left">
+                                    <img alt="image" src="/static/new-design/assets/img/a1.jpg">
+                                </a>
+                                <div class="media-body">
+                                    <a href="#">
+                                        Andrew Williams
+                                    </a>
+                                    Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words.
+                                    <br/>
+                                    <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 26 Like this!</a> -
+                                    <small class="text-muted">12.06.2014</small>
+                                </div>
+                            </div>
+
+                            <div class="social-comment">
+                                <a href="" class="pull-left">
+                                    <img alt="image" src="/static/new-design/assets/img/a2.jpg">
+                                </a>
+                                <div class="media-body">
+                                    <a href="#">
+                                        Andrew Williams
+                                    </a>
+                                    Making this the first true generator on the Internet. It uses a dictionary of.
+                                    <br/>
+                                    <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
+                                    <small class="text-muted">10.07.2014</small>
+                                </div>
+                            </div>
+
+                            <div class="social-comment">
+                                <a href="" class="pull-left">
+                                    <img alt="image" src="img/a3.jpg">
+                                </a>
+                                <div class="media-body">
+                                    <textarea class="form-control" placeholder="Write comment..."></textarea>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="social-feed-box">
+
+                        <div class="pull-right social-action dropdown">
+                            <button data-toggle="dropdown" class="dropdown-toggle btn-white">
+                                <i class="fa fa-angle-down"></i>
+                            </button>
+                            <ul class="dropdown-menu m-t-xs">
+                                <li><a href="#">Config</a></li>
+                            </ul>
+                        </div>
+                        <div class="social-avatar">
+                            <a href="" class="pull-left">
+                                <img alt="image" src="img/a6.jpg">
+                            </a>
+                            <div class="media-body">
+                                <a href="#">
+                                    Andrew Williams
+                                </a>
+                                <small class="text-muted">Today 4:21 pm - 12.06.2014</small>
+                            </div>
+                        </div>
+                        <div class="social-body">
+                            <p>
+                                Many desktop publishing packages and web page editors now use Lorem Ipsum as their
+                                default model text, and a search for 'lorem ipsum' will uncover many web sites still
+                                in their infancy. Packages and web page editors now use Lorem Ipsum as their
+                                default model text.
+                            </p>
+                            <p>
+                                Lorem Ipsum as their
+                                default model text, and a search for 'lorem ipsum' will uncover many web sites still
+                                in their infancy. Packages and web page editors now use Lorem Ipsum as their
+                                default model text.
+                            </p>
+                            <img src="/static/new-design/assets/img/gallery/3.jpg" class="img-responsive">
+                            <div class="btn-group">
+                                <button class="btn btn-white btn-xs"><i class="fa fa-thumbs-up"></i> Like this!</button>
+                                <button class="btn btn-white btn-xs"><i class="fa fa-comments"></i> Comment</button>
+                                <button class="btn btn-white btn-xs"><i class="fa fa-share"></i> Share</button>
+                            </div>
+                        </div>
+                        <div class="social-footer">
+                            <div class="social-comment">
+                                <a href="" class="pull-left">
+                                    <img alt="image" src="/static/new-design/assets/img/a1.jpg">
+                                </a>
+                                <div class="media-body">
+                                    <a href="#">
+                                        Andrew Williams
+                                    </a>
+                                    Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words.
+                                    <br/>
+                                    <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 26 Like this!</a> -
+                                    <small class="text-muted">12.06.2014</small>
+                                </div>
+                            </div>
+
+                            <div class="social-comment">
+                                <a href="" class="pull-left">
+                                    <img alt="image" src="/static/new-design/assets/img/a2.jpg">
+                                </a>
+                                <div class="media-body">
+                                    <a href="#">
+                                        Andrew Williams
+                                    </a>
+                                    Making this the first true generator on the Internet. It uses a dictionary of.
+                                    <br/>
+                                    <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
+                                    <small class="text-muted">10.07.2014</small>
+                                </div>
+                            </div>
+
+                            <div class="social-comment">
+                                <a href="" class="pull-left">
+                                    <img alt="image" src="img/a8.jpg">
+                                </a>
+                                <div class="media-body">
+                                    <a href="#">
+                                        Andrew Williams
+                                    </a>
+                                    Making this the first true generator on the Internet. It uses a dictionary of.
+                                    <br/>
+                                    <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
+                                    <small class="text-muted">10.07.2014</small>
+                                </div>
+                            </div>
+
+                            <div class="social-comment">
+                                <a href="" class="pull-left">
+                                    <img alt="image" src="/static/new-design/assets/img/a3.jpg">
+                                </a>
+                                <div class="media-body">
+                                    <textarea class="form-control" placeholder="Write comment..."></textarea>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+
+                </div>
+                -->
+
+                <!--
+                <div class="col-lg-4 m-b-lg">
+                    <div id="vertical-timeline" class="vertical-container light-timeline no-margins">
+                        <div class="vertical-timeline-block">
+                            <div class="vertical-timeline-icon navy-bg">
+                                <i class="fa fa-briefcase"></i>
+                            </div>
+
+                            <div class="vertical-timeline-content">
+                                <h2>Meeting</h2>
+                                <p>Conference on the sales results for the previous year. Monica please examine sales trends in marketing and products. Below please find the current status of the sale.
+                                </p>
+                                <a href="#" class="btn btn-sm btn-primary"> More info</a>
+                                    <span class="vertical-date">
+                                        Today <br>
+                                        <small>Dec 24</small>
+                                    </span>
+                            </div>
+                        </div>
+
+                        <div class="vertical-timeline-block">
+                            <div class="vertical-timeline-icon blue-bg">
+                                <i class="fa fa-file-text"></i>
+                            </div>
+
+                            <div class="vertical-timeline-content">
+                                <h2>Send documents to Mike</h2>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since.</p>
+                                <a href="#" class="btn btn-sm btn-success"> Download document </a>
+                                    <span class="vertical-date">
+                                        Today <br>
+                                        <small>Dec 24</small>
+                                    </span>
+                            </div>
+                        </div>
+
+                        <div class="vertical-timeline-block">
+                            <div class="vertical-timeline-icon lazur-bg">
+                                <i class="fa fa-coffee"></i>
+                            </div>
+
+                            <div class="vertical-timeline-content">
+                                <h2>Coffee Break</h2>
+                                <p>Go to shop and find some products. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's. </p>
+                                <a href="#" class="btn btn-sm btn-info">Read more</a>
+                                <span class="vertical-date"> Yesterday <br><small>Dec 23</small></span>
+                            </div>
+                        </div>
+
+                        <div class="vertical-timeline-block">
+                            <div class="vertical-timeline-icon yellow-bg">
+                                <i class="fa fa-phone"></i>
+                            </div>
+
+                            <div class="vertical-timeline-content">
+                                <h2>Phone with Jeronimo</h2>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum aut hic quasi placeat iure tempora laudantium ipsa ad debitis unde? Iste voluptatibus minus veritatis qui ut.</p>
+                                <span class="vertical-date">Yesterday <br><small>Dec 23</small></span>
+                            </div>
+                        </div>
+
+                        <div class="vertical-timeline-block">
+                            <div class="vertical-timeline-icon navy-bg">
+                                <i class="fa fa-comments"></i>
+                            </div>
+
+                            <div class="vertical-timeline-content">
+                                <h2>Chat with Monica and Sandra</h2>
+                                <p>Web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like). </p>
+                                <span class="vertical-date">Yesterday <br><small>Dec 23</small></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                -->
+
+            </div>
+
+        </div>
+        </div>
+     </div>
+
+     <!-- Mainly scripts -->
+    <script src="/static/new-design/assets/js/jquery-2.1.1.js"></script>
+    <script src="/static/new-design/assets/js/bootstrap.js"></script>
+    <script src="/static/new-design/assets/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/static/new-design/assets/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="/static/new-design/assets/js/inspinia.js"></script>
+    <script src="/static/new-design/assets/js/plugins/pace/pace.min.js"></script>
+
+    <!-- Sparkline -->
+    <script src="/static/new-design/assets/js/plugins/sparkline/jquery.sparkline.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+
+
+            $("#sparkline1").sparkline([34, 43, 43, 35, 44, 32, 44, 48], {
+                type: 'line',
+                width: '100%',
+                height: '50',
+                lineColor: '#1ab394',
+                fillColor: "transparent"
+            });
+
+
+        });
+    </script>
+
+{% endblock %}
+{% block script %}
+ <script type="text/javascript">
+
+$(function() {
+    $('.acceptrejectbutton').bind('click', function(){
+        var self = $(this);
+        var inviteduser_id = self.attr('inviteduser_id');
+        var teamid = self.attr('teamid');
+        var action = self.attr('requestaction');
+
+        console.log(inviteduser_id);
+
+
+        $.get('/team/accept_reject_invitation_request/'+inviteduser_id+'/'+teamid+'/'+ action, function () {
+            if(action == "accept"){
+                window.location = '/team/'
+                //window.location = '/team/getteams/'+inviteduser_id+'/'+teamid;
+                /*self.empty()
+                self.html('<i class="fa fa-check" aria-hidden="true"></i> Invitation Accepted')
+                self.attr('disabled','disabled');
+                $('#rejectbutton').hide();
+                */
+            }
+
+            if(action == "reject"){
+                window.location = '/portfolio/';
+            }
+        });
+    });
+});
+
+</script>
+{% endblock %}
+
+

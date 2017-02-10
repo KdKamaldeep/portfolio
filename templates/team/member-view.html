@@ -1,0 +1,13 @@
+{% load get_profile_extra %}
+{%for user in users%}
+{% if request.user.is_authenticated %}
+{%if not user.id == request.user.id%}
+        <div class="col-md-12" >
+            <div style="clear:both;padding-top:10px;"></div>
+            <div class="col-md-4"><img alt="logo" src="{% user_profile_pic user%}" style="height:30px;width:50px;margin-top:2px;margin-left:-37px;;"> {{user.first_name}}</div>
+            <div class="col-md-8" ><a href="/team/add_users/{{user.id}}"><button class="btn btn-primary" style="float:right;margin-right: -38px;">Add</button></a></div>
+
+        </div>
+{%endif%}
+{%endif%}
+{%endfor%}

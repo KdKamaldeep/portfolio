@@ -1,0 +1,55 @@
+@keyframes slidy {
+0% { left: 0%; }
+20% { left: 0%; }
+25% { left: -100%; }
+45% { left: -100%; }
+50% { left: -200%; }
+70% { left: -200%; }
+75% { left: -300%; }
+95% { left: -300%; }
+100% { left: -400%; }
+}
+
+body { margin: 0; }
+div.slider { overflow: hidden; }
+div.slider figure img { width: 20%; float: left; }
+div.slider figure {
+  position: relative;
+  width: 500%;
+  margin: 0;
+  left: 0;
+  text-align: left;
+  font-size: 0;
+  animation: 10s slidy infinite;
+}
+
+@keyframes cf4FadeInOut {
+  0% {
+    opacity:1;
+  }
+  17% {
+    opacity:1;
+  }
+  25% {
+    opacity:0;
+  }
+  92% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+.cf4a img:nth-of-type(1) {
+  animation-delay: 6s;
+}
+.cf4a img:nth-of-type(2) {
+  animation-delay: 4s;
+}
+.cf4a img:nth-of-type(3) {
+  animation-delay: 2s;
+}
+.cf4a img:nth-of-type(4) {
+  animation-delay: 0;
+}

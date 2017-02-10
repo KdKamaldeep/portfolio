@@ -1,0 +1,129 @@
+{% extends 'base/legendmaster.html' %}
+{%load get_profile_extra%}
+{% block content %}
+<div class="container">
+    <div class="row">
+
+        <div class="header" style="margin-top: 25px !important;padding-left: 30px;">
+                <h4 class="title">Your Contact(s)</h4>
+        </div>
+         <div style="margin-top:40px !important;">
+                {% for contact in usercontacts%}
+                {% get_user_contacts_by_userid contact.contact.id as usercontacts%}
+                <div class="col-sm-6" style="margin-bottom:40px;">
+                            <div class="well well-light well-sm no-margin no-padding" >
+                              <div class="row">
+                                            <div class="col-sm-3 profile-pic">
+                                                <a href="/public/viewprofile/{{contact.contact.id}}/yes">
+                                                    <img src="{% user_profile_pic contact.contact %}">
+                                                </a>
+                                                <div class="padding-10">
+                                                    <h4 class="font-md"><strong>1,543</strong>
+                                                    <br>
+                                                    <small>Followers</small></h4>
+                                                {% if usercontacts.totalcontacts %}
+                                                    <h4 class="font-md">
+                                                        <strong>
+
+                                                          {{usercontacts.totalcontacts}}
+
+                                                        </strong>
+                                                        <small>Connections</small>
+                                                    </h4>
+                                                 {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <h1 class="h1cls">{{contact.contact.first_name}}
+                                                    <span class="semi-bold">{{contact.contact.last_name}}</span>
+                                                <br>
+                                                <small> {{contact.contact.position}}</small></h1>
+
+                                                <ul class="list-unstyled">
+                                                    <li>
+                                                        <p class="text-muted">
+                                                            <i class="fa fa-phone"></i>&nbsp;&nbsp;
+                                                            {%if contact.contact.phoneno%}
+                                                            {{contact.contact.phoneno}}
+                                                            {%else%}
+                                                            N/A
+                                                            {%endif%}
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p class="text-muted">
+                                                            <i class="fa fa-envelope"></i>&nbsp;&nbsp;
+                                                            <a href="mailto:{{profile.user.email}}">
+                                                                {{contact.contact.email | slice:':20'}}</a>
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p class="text-muted">
+                                                            <i class="fa fa-skype"></i>&nbsp;&nbsp;
+                                                            <span class="txt-color-darken">N/A</span>
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p class="text-muted">
+                                                            <i class="fa fa-calendar"></i>&nbsp;&nbsp;
+                                                            <span class="txt-color-darken">Free after
+                                                                <a href="javascript:void(0);" rel="tooltip"
+                                                                   title="" data-placement="top"
+                                                                   data-original-title="Create an Appointment">
+                                                                    4:30 PM
+                                                                </a>
+                                                            </span>
+                                                        </p>
+                                                    </li>
+                                                </ul>
+
+                                                <br>
+                                                <br>
+
+                                            </div>
+                                            <div class="col-sm-3" style="padding-left:0px;">
+                                                {% if usercontacts.usercontacts|length > 0 %}
+                                                <h1 class="h1cls" style="margin-left:-7px;"><small>Connections</small></h1>
+                                                    <ul class="list-inline friends-list">
+                                                        {% for contact in usercontacts.usercontacts %}
+                                                            <li>
+
+                                                                <a href="/public/viewprofile/{{contact.contact.id}}/yes"
+                                                                data-poload="/public/viewprofile/{{contact.contact.id}}/no"
+                                                                data-url="/public/viewprofile/{{contact.contact.id}}/no">
+                                                                <img src="{% user_profile_pic contact.contact %}"
+                                                                     alt="{{contact.contact.first_name}}">
+                                                                </a>
+                                                            </li>
+                                                        {% endfor %}
+                                                        {% if usercontacts.showmore == True %}
+                                                            <li>
+													            <a href="javascript:void(0);">{{usercontacts.leftcontacts}} more</a>
+												            </li>
+                                                        {% endif %}
+                                                    </ul>
+                                                {% else %}
+                                                    <h1 class="h1cls" style="margin-left:-7px;"><small>No Connections</small></h1>
+                                                {%endif%}
+
+                                            </div>
+                                        </div>
+                                <div style="padding:10px">
+                                    <a href="javascript:void(0);" class="btn btn-default btn-xs">
+                                                        <i class="fa fa-envelope-o"></i> Send Message</a>
+
+                                    <a href="javascript:void(0);" class="btn btn-default btn-xs">
+                                        <i class="fa fa-envelope-o"></i> Un-Follow {{contact.contact.first_name}}
+                                        {{contact.contact.last_name}}
+                                    </a>
+
+                                 </div>
+                            </div>
+                    </div>
+                {%endfor%}
+                <div class="clearfix"></div>
+            </div>
+
+    </div>
+ </div>
+{% endblock %}

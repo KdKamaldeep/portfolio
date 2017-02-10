@@ -1,0 +1,77 @@
+{% extends 'base/legendmaster.html' %}
+{% block content %}
+    <!--<iframe src="{{url}}" height="600px" width="100%"></iframe>-->
+<div class="container">
+        <div class="row margin-vert-30">
+                                <div class="col-md-12">
+                                    <h2>{{portfolio.title}}</h2>
+                                    <!-- Filter Buttons -->
+                                    <div class="portfolio-filter-container margin-top-20">
+                                        <ul class="portfolio-filter">
+                                            <li class="portfolio-filter-label label label-primary">
+                                                filter by:
+                                            </li>
+                                            <li>
+                                                <a href="#" class="portfolio-selected btn btn-default" data-filter="*">All</a>
+                                            </li>
+                                            <li>
+                                                <a href="#" class="btn btn-default" data-filter=".code">Coding</a>
+                                            </li>
+                                            <li>
+                                                <a href="#" class="btn btn-default" data-filter=".design">Design</a>
+                                            </li>
+                                            <li>
+                                                <a href="#" class="btn btn-default" data-filter=".audio">Audio</a>
+                                            </li>
+                                            <li>
+                                                <a href="#" class="btn btn-default" data-filter=".video">Video</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!-- End Filter Buttons -->
+                                </div>
+                            </div>
+
+        <div class="row">
+
+            <!--<div class="col-md-12 portfolio-group no-padding">-->
+                <!-- Portfolio Item -->
+            {% for project in projects %}
+                <div class="portfolio-groups">
+                    <div class="col-md-6 portfolio-item margin-bottom-40 design ">
+                    <div>
+                        <a href="#">
+                            <h3 class="margin-top-20">{{project.title}}</h3>
+                            <figure>
+                                <img src="/media/{{project.projectpic}}" alt="image1">
+                                <figcaption>
+                                    <span style="color:#212121; ">
+                                        {{project.description | safe | slice:':150'}}...
+                                    </span>
+                                </figcaption>
+                            </figure>
+                        </a>
+                    </div>
+                </div>
+                </div>
+            {% endfor %}
+                <!-- End Portfolio Item -->
+                <!-- Portfolio Item -->
+                <div class="portfolio-groups">
+                    <div class="col-md-6 portfolio-item margin-bottom-40 audio">
+                    <div>
+                        <a href="#">
+                            <h3 class="margin-top-20">Quam nunc putamus</h3>
+                            <figure>
+                                <img src="assets/img/portfolio/image2.jpg" alt="image2">
+                                <figcaption>
+                                    <span style="color:#212121; ">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</span>
+                                </figcaption>
+                            </figure>
+                        </a>
+                    </div>
+                </div>
+                </div>
+            <!--</div>-->
+  </div>
+{% endblock %}

@@ -1,0 +1,179 @@
+{% extends 'base/legendmaster.html' %}
+{%load get_profile_extra%}
+{% load urls %}
+{%block searchcontent%}
+<div class="searchbar">
+   <form method="get" action="/public/searchteams/">
+             <div class="form-group divinput">
+                <input type="text" value="{{teamname}}" placeholder="Team Name" name="teamname"
+                       style="width:400px"
+                       class="form-control onfocusofinput">
+            </div>
+                <div class="cleafix"></div>
+                <div style="float: right;
+            margin-top: -15px;" class="form-group">
+                <button class="btn btn-primary" type="submit" style="border-radius: 0px;">Search</button>
+            </div>
+        <div class="cleafix"></div>
+     </form>
+</div>
+{%endblock%}
+{% block content %}
+
+
+<div class="row" style="margin-top:10px"></div>
+<div class="container ">
+            <div class="row" >
+              <div class="wrapper-content animated fadeInRight">
+                  {% if teams|length <= 0 %}
+               <div class="cards">
+                  <div class="header">
+                     <h4 class="title">Nothing Found!</h4>
+                  </div>
+                  <div class="content">
+                     We did not found any team that match your search criteria.
+                  </div>
+               </div>
+            {% endif %}
+
+
+
+                  {% if teams|length > 0 %}
+                      <div class="header" style="margin-top:-35px !important;padding-left: 20px;">
+                        <h4 class="title">Showing {{ teams.number }} of {{ teams.paginator.num_pages }}</h4>
+                      </div>
+                 {% endif %}
+
+                <!--  {% regroup teams by owner_id as teamlist %}
+                  <ul>
+                    {% for team in teamlist %}
+                    <li>{{ team.grouper }} </li>
+                      <ul>
+                            {% for city in team.list %}
+                                <li>{{ city.teamname }}</li>
+                            {% endfor%}
+                      </ul>
+                    {% endfor %}
+                    </ul>
+                    -->
+
+
+
+                  <div style="border:0px solid" class="row">
+
+                  {%for team in teams%}
+
+                  {% count_accepted_team_member team.id as teammember %}
+                    {% if teammember.teammembers|length > 0 %}
+                        <div class="col-lg-4">
+                        <div class="ibox borderwithouttop">
+                        <div class="ibox-title">
+                            <h5>{{team.teamname | title}}</h5>
+                        </div>
+
+                        <div class="ibox-content">
+
+                            <div class="team-members">
+                                {% for teammeb in teammember.teammembers %}
+                                    {% get_profile teammeb.inviteduser_id as userprofile %}
+                                    {% if teammeb.status == "ACCEPTED"%}
+                                      <a href="#"><img alt="member" class="img-circle"
+                                                     style="border-radius:20px;border:3px solid #b3ffcc;"
+                                                     title="{{userprofile.user.first_name | title}} (Accepted)"
+                                                          data-toggle="tooltip"
+                                                     src="{%user_profile_pic_by_id teammeb.inviteduser_id%}"></a>
+                                     {%endif%}
+                                {%endfor%}
+
+                                {% if teammember.showmore == True %}
+                                    <span><a href="/public/team/{{team.hostedteamid}}">{{teammember.leftmember}} more</a></span>
+                                {% endif %}
+                            </div>
+
+                            <h4>Info about {{team.teamname | title}}</h4>
+                            <p>
+                               {{teamlst.team.aboutteam | truncatechars:50 }}
+                            </p>
+                            <!--<div>
+                                <span>Status of current project:</span>
+                                <div class="stat-percent">48%</div>
+                                <div class="progress progress-mini">
+                                    <div style="width: 48%;" class="progress-bar"></div>
+                                </div>
+                            </div> -->
+
+                            <hr style="border:0;border-top:1px solid lightgray;margin:0;height:1px;" />
+
+                            <div class="row  m-t-sm">
+                                <div class="col-sm-6">
+                                    <div class="font-bold">PROJECTS</div>
+                                {% count_accepted_members_projects team.id as totalprojects %}
+                                    {{totalprojects}}
+                                </div>
+                                <div class="col-sm-6 text-right">
+                                    <div class="font-bold">PORTFOLIOS</div>
+                                    {% count_accepted_members_portfolio team.id %}
+                                </div>
+                            </div>
+
+                            <div class="row  m-t-sm">
+                                <div class="col-sm-12">
+                                    <div class="font-bold">
+                                        <a href="/public/team/{{team.hostedteamid}}">
+                                            <span class="label btn btn-primary pull-left"
+                                                  style="background-color:#34495e;border-color:#34495e;color:#ffffff"
+                                            >VIEW DETAILS</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                 </div>
+
+                            <div class="row  m-t-sm">
+                                <div class="col-sm-12">
+                                    <div class="font-bold">
+                                        <hr style="border:0;border-top:1px solid lightgray;margin:0;height:1px;"/>
+                                         {% get_owner_id_by_teamid team.id as owner %}
+                                        <a href="/public/viewprofile/{{owner.id}}/yes" style="float:right">
+                                            {{owner.first_name | title}} {{owner.last_name | title}} (Owner)
+                                            </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                    </div>
+                    </div>
+                     </div>
+                    {%endif%}
+
+                  {%endfor%}
+
+
+
+              </div>
+            </div>
+
+            <div style="display: none;" id="profilecontent"></div>
+                {% if teams|length > 0%}
+                    <ul class="pagination" style="float: left;margin-left: 15px;">
+                        {% if teams.has_previous %}
+                            <li><a href="{% add_params request.get_full_path page=projects.previous_page_number %}">Prev</a></li>
+                        {%else%}
+                            <li><span class="currentpage">Prev</span></li>
+                        {% endif %}
+                        {% for page in teams.paginator.page_range %}
+                            {% ifequal page teams.number %}
+                                <li><span class="currentpage">{{page}}</span></li>
+                                {% else %}
+                                <li><a href="{% add_params request.get_full_path page=page %}">{{page}}</a></li>
+                            {% endifequal  %}
+                        {% endfor %}
+                        {% if teams.has_next %}
+                            <li><a href="{% add_params request.get_full_path page=projects.next_page_number %}">Next</a></li>
+                        {%else%}
+                            <li><span class="currentpage">Next</span></li>
+                        {% endif %}
+                    </ul>
+                {%endif%}
+            </div>
+ </div>
+{%endblock%}
