@@ -1,4 +1,4 @@
-Django==1.10.1
+Django==2.2.24
 Pillow==2.3.0
 django-contrib-comments==1.7.3
 django-hitcount==1.2.2
