@@ -1,5 +1,5 @@
 Django==1.10.1
-Pillow==2.3.0
+Pillow==9.0.1
 django-contrib-comments==1.7.3
 django-hitcount==1.2.2
 django-model-utils==2.6
