@@ -14,7 +14,7 @@ psycopg2==2.4.5
 pyOpenSSL==0.13
 pycrypto==2.6.1
 python-http-client==2.2.1
-requests==2.2.1
+requests==2.20.0
 sendgrid-django==2.0.0
 sorl-thumbnail==12.3
 dj-database-url==0.4.1
